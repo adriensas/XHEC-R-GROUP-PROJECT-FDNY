@@ -1,3 +1,4 @@
 ^devstuffs\.R$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+.gitignore
