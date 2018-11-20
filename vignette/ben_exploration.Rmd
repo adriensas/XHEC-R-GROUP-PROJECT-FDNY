@@ -69,3 +69,33 @@ data_by_year %>% group_by(INCIDENT_DATE_TIME) %>%
   summarise(total = n())
 ```
 We notice that number of incidents seem quite stable over the 5 years with slightly lower incidents in 2013 and more in 2015. Why?? Influenced by what?? 
+
+```{r}
+data_by_month <- data %>% mutate(INCIDENT_DATE_TIME = substr(INCIDENT_DATE_TIME,6,7))
+data_by_month
+
+#total number of incidents by month over the last 5 years 
+data_by_month %>% group_by(INCIDENT_DATE_TIME) %>% 
+  summarise(total = n())
+```
+more accidents in july than in february! Due to what? Holidays? 
+
+```{r}
+#incidents by months
+yo <- data_by_month %>% group_by(INCIDENT_DATE_TIME, INCIDENT_TYPE_DESC) %>% 
+  summarise(total = n()) %>% 
+  spread(key = INCIDENT_DATE_TIME, value = total)
+
+yo[,2:13][is.na(yo[2:13])] <- 0 
+
+yo <- yo %>%   
+  mutate(sum_inci = rowSums(select(.,2:13))) %>% 
+  arrange(desc(sum_inci))
+
+View(yo)
+```
+We notice that depending on the incidents, there are some months where the number of incidents is considerable increased!
+
+##Analysis by places
+
+Criterion to take into account: Period of the year (months), the time it is and the places!
