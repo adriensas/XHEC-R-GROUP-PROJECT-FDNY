@@ -72,7 +72,6 @@ We notice that number of incidents seem quite stable over the 5 years with sligh
 
 ```{r}
 data_by_month <- data %>% mutate(INCIDENT_DATE_TIME = substr(INCIDENT_DATE_TIME,6,7))
-data_by_month
 
 #total number of incidents by month over the last 5 years 
 data_by_month %>% group_by(INCIDENT_DATE_TIME) %>% 
@@ -96,6 +95,31 @@ View(yo)
 ```
 We notice that depending on the incidents, there are some months where the number of incidents is considerable increased!
 
+```{r}
+#TOTAL NUMBER OF INCIDENTS BY HOURS
+data_by_hours <- data %>% mutate(INCIDENT_DATE_TIME = substr(INCIDENT_DATE_TIME,12,13))
+
+data_by_hours %>% group_by(INCIDENT_DATE_TIME) %>% summarise(total = n())
+```
+More incidents starting at 9 and more in the afternoon (pick ar 17H/18H as expected).
+
+```{r}
+#incidents by months
+hours <- data_by_hours %>% group_by(INCIDENT_DATE_TIME, INCIDENT_TYPE_DESC) %>% 
+  summarise(total = n()) %>% 
+  spread(key = INCIDENT_DATE_TIME, value = total)
+
+hours[,2:25][is.na(hours[2:25])] <- 0 
+
+hours <- hours %>%   
+  mutate(sum_inci = rowSums(select(.,2:25))) %>% 
+  arrange(desc(sum_inci))
+
+View(hours)
+```
+
+We need to need to make this distinction by days of the week very important!
+
 ##Analysis by places
 
-Criterion to take into account: Period of the year (months), the time it is and the places!
+Criterion to take into account: Period of the year (months), the time it is, the day of the week, the places, the weather!
