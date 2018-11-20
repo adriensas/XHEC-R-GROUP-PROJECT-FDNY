@@ -1,0 +1,79 @@
+---
+title: "AS-exploration"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exploration of the data
+
+### Library load
+
+```{r}
+library(readr)
+library(dplyr)
+library(tidyverse)
+```
+
+
+### Data Load
+
+```{r}
+data.raw <- read_csv("../data-raw/incidents-responded-to-by-fire-companies.csv")
+```
+
+### Actual exploration
+
+What are the column ?
+```{r}
+head(data.raw)
+glimpse(data.raw)
+```
+
+Improve data format (optimisation)
+
+```{r}
+data.use <- data.raw %>% mutate(
+  INCIDENT_TYPE_DESC=as.factor(INCIDENT_TYPE_DESC),
+  HIGHEST_LEVEL_DESC=as.factor(HIGHEST_LEVEL_DESC),
+  ACTION_TAKEN1_DESC=as.factor(ACTION_TAKEN1_DESC),
+  ACTION_TAKEN2_DESC=as.factor(ACTION_TAKEN2_DESC),
+  ACTION_TAKEN3_DESC=as.factor(ACTION_TAKEN3_DESC),
+  PROPERTY_USE_DESC=as.factor(PROPERTY_USE_DESC),
+  BOROUGH_DESC=as.factor(BOROUGH_DESC),
+  PROPERTY_USE_DESC=as.factor(PROPERTY_USE_DESC)
+  )
+```
+
+
+## Nb intervention par période par quartier
+
+```{r}
+# Count by borough
+data.perweekday <- data.use %>% 
+  group_by(BOROUGH_DESC, weekdays(INCIDENT_DATE_TIME)) %>% 
+  summarize(n=n()) #%>% 
+  #spread(key = BOROUGH_DESC, value = n)
+data.perweeknb <- data.use %>% 
+  group_by(BOROUGH_DESC, WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>%
+  summarize(n=n())
+```
+
+```{r}
+ggplot(
+  data=data.perweeknb,
+  aes(x=WEEK_NB, y=n, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+  data=data.perweekday %>% mutate(ID=row_number()),
+  aes(x=ID, y=n, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+```
+
+
