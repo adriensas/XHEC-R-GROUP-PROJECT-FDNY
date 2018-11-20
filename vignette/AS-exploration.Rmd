@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(dplyr)
 library(tidyverse)
+library(lubridate)
 ```
 
 
@@ -32,6 +33,7 @@ head(data.raw)
 glimpse(data.raw)
 ```
 
+
 Improve data format (optimisation)
 
 ```{r}
@@ -47,6 +49,11 @@ data.use <- data.raw %>% mutate(
   )
 ```
 
+```{r}
+firerelatedIncident <- data.raw %>% group_by(INCIDENT_TYPE_DESC) %>% summarise(n=n()) %>% filter(grepl('fire|smoke', tolower(INCIDENT_TYPE_DESC)) & !grepl('no fire', tolower(INCIDENT_TYPE_DESC))) %>% filter(n>200)
+ggplot(data = firerelatedIncident, aes(x=INCIDENT_TYPE_DESC, y=n)) +geom_bar(stat="identity")
+data.use <- data.use %>%  filter(INCIDENT_TYPE_DESC %in% (firerelatedIncident %>% pull(INCIDENT_TYPE_DESC)))
+```
 
 ## Nb intervention par période par quartier
 
@@ -59,6 +66,14 @@ data.perweekday <- data.use %>%
 data.perweeknb <- data.use %>% 
   group_by(BOROUGH_DESC, WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>%
   summarize(n=n())
+
+data.perweeknb.Years <- data.use %>% 
+  group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>% 
+  summarize(n=n()) %>%
+  ungroup() %>% 
+  filter(YEAR!=2018) %>% 
+  group_by(WEEK_NB) %>%
+  summarise(VAR=sqrt(var(n)))
 ```
 
 ```{r}
@@ -71,6 +86,12 @@ ggplot(
 ggplot(
   data=data.perweekday %>% mutate(ID=row_number()),
   aes(x=ID, y=n, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+    data=data.perweeknb.Years,
+    aes(x=WEEK_NB, y=VAR)
   ) +
   geom_point() +
   geom_line()
@@ -110,17 +131,21 @@ ggplot(
 ### Year Compartison
 
 ```{r}
-data.time.year.perweeknb <- data.use %>%
+data.time.year.perweeknb.var <- data.use %>%
   filter(!is.na(TOTAL_INCIDENT_DURATION)) %>%
   group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>% 
   summarize(MEAN_TIME=mean(TOTAL_INCIDENT_DURATION)) %>% 
-  filter(MEAN_TIME<10000)
+  filter(MEAN_TIME<10000) %>% 
+  ungroup() %>% 
+  filter(YEAR!=2018) %>% 
+  group_by(WEEK_NB) %>%
+  summarise(VAR=sqrt(var(MEAN_TIME)))
 ```
 
 ```{r}
 ggplot(
-  data=data.time.year.perweeknb,
-  aes(x=WEEK_NB, y=MEAN_TIME, color = YEAR, linetype = YEAR)
+  data=data.time.year.perweeknb.var,
+  aes(x=WEEK_NB, y=VAR)
   ) +
   geom_point() +
   geom_line()
@@ -128,3 +153,33 @@ ggplot(
 
 
 ## Mean number of cars
+
+```{r}
+# Count by borough
+data.perweekday.units <- data.use %>% 
+  filter(!is.na(UNITS_ONSCENE)) %>% 
+  group_by(BOROUGH_DESC, weekdays(INCIDENT_DATE_TIME)) %>% 
+  summarize(n=mean(UNITS_ONSCENE))
+
+data.perweeknb.units <- data.use %>% 
+  filter(!is.na(UNITS_ONSCENE)) %>% 
+  group_by(BOROUGH_DESC, WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>%
+  summarize(n=mean(UNITS_ONSCENE))
+```
+
+# Per day analysis
+
+```{r}
+data.perweekday <- data.use %>%
+  group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), DAY_DATE = strftime(INCIDENT_DATE_TIME,format="%m-%d")) %>% 
+  summarize(n=n()) %>%
+  mutate(DAY = row_number())
+ggplot(
+  data=data.perweekday,
+  aes(x=DAY, y=n, color = YEAR, linetype = YEAR)
+  ) +
+  geom_point() +
+  geom_line()
+data.perweekday %>% filter(n>250)
+```
+
