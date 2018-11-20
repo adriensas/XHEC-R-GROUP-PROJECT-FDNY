@@ -76,4 +76,55 @@ ggplot(
   geom_line()
 ```
 
+## Mean ncident duration per period / week day
 
+```{r}
+# Mean by borough
+data.time.perweekday <- data.use %>% 
+  filter(!is.na(TOTAL_INCIDENT_DURATION)) %>% 
+  group_by(BOROUGH_DESC, weekdays(INCIDENT_DATE_TIME)) %>% 
+  summarize(MEAN_TIME=mean(TOTAL_INCIDENT_DURATION)) %>% 
+  filter(MEAN_TIME<10000)
+
+data.time.perweeknb <- data.use %>%
+  filter(!is.na(TOTAL_INCIDENT_DURATION)) %>%
+  group_by(BOROUGH_DESC, WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>% 
+  summarize(MEAN_TIME=mean(TOTAL_INCIDENT_DURATION)) %>% 
+  filter(MEAN_TIME<10000)
+```
+
+```{r}
+ggplot(
+  data=data.time.perweeknb,
+  aes(x=WEEK_NB, y=MEAN_TIME, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+  data=data.time.perweekday %>% mutate(ID=row_number()),
+  aes(x=ID, y=MEAN_TIME, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+```
+### Year Compartison
+
+```{r}
+data.time.year.perweeknb <- data.use %>%
+  filter(!is.na(TOTAL_INCIDENT_DURATION)) %>%
+  group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>% 
+  summarize(MEAN_TIME=mean(TOTAL_INCIDENT_DURATION)) %>% 
+  filter(MEAN_TIME<10000)
+```
+
+```{r}
+ggplot(
+  data=data.time.year.perweeknb,
+  aes(x=WEEK_NB, y=MEAN_TIME, color = YEAR, linetype = YEAR)
+  ) +
+  geom_point() +
+  geom_line()
+```
+
+
+## Mean number of cars
