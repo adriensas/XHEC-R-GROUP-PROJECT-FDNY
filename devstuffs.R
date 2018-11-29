@@ -4,5 +4,8 @@ library(usethis)
 library(testthat)
 library(knitr)
 
-Authors@R: c(person("Adrien", "Sasportes", email =
-                      "adrien.sasportes@polytechnique.edu", role = c("aut", "cre")))
+install.packages("testthat")
+
+usethis::use_test("mean_per_time_step")
+
+devtools::check()
