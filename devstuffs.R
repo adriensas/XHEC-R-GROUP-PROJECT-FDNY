@@ -6,6 +6,8 @@ library(knitr)
 
 install.packages("testthat")
 
+# Create the tests
 usethis::use_test("mean_per_time_step")
+usethis::use_test("filter")
 
 devtools::check()
