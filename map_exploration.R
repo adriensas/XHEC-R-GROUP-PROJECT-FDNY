@@ -7,15 +7,21 @@ library("tidyverse")
 library("rgdal")
 library("xml2")
 
+#Loading a NYC map of the distribution of fire compagnies
 nyc_map_fc <- st_read(dsn = "data/nyfc",
                       layer = "nyfc",
                       quiet = TRUE)
 
+#Tidying the data
 nyc_map_fc <- nyc_map_fc %>% 
   mutate(FireDiv = factor(FireDiv),
          FireBN = factor(FireBN))
 
+#plot(nyc_map_fc %>% select(FireDiv))
+
+#Loading the firebox data, in order to merge the intervention data with the map
 nyc_map_firebox <- st_read(dsn = "data/FDNY_Box_Locations.kml")
+
 
 test <- read_xml("data/FDNY_Box_Locations.kml")
 test <- read_xml("D://henri/Documents/2018 Polytechnique annee 3/Data Science for Business/RProject/XHEC-R-GROUP-PROJECT-FDNY/data/FDNY_Box_Locations.kml")
