@@ -1,7 +1,7 @@
 #' Compute the mean of a certain value per time step
 #'
 #' @param df subset of the main dataframe
-#' @param time_step
+#' @param time_step in second
 #' @param column_name column of the value of interest
 #'
 #' @return data frame columns : time, mean

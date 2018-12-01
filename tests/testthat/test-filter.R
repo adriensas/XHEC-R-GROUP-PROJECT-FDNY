@@ -16,7 +16,7 @@ test_that("It gives a subset of the full df :", {
 })
 
 test_that("ZIP_CODE is fitered as expected :", {
-  dim.error <- filtered.data %>% filter(ZIP_CODE != input$ZIP_CODE)
+  dim.error <- filtered.data %>% filter(ZIP_CODE != input$ZIP_CODE) %>% dim()
   expect_equal(dim.error, 0)
 })
 
