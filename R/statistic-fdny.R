@@ -10,35 +10,19 @@
 #'
 
 statistic_fdny <- function(df, input){
+
+  #call filter function to go from raw data to filtered data
   filter_fdny(df, input)
 
-  #compute column fordeployment time
-  #TODO how to return an error if negative in a clean way?
-  deployment_time <- df %>%
-    mutate(depart_time =
-             (as.numeric(substr(INCIDENT_DATE_TIME,12,13))*3600) +
-             (as.numeric(substr(INCIDENT_DATE_TIME,15,16))*60) +
-             (as.numeric(substr(INCIDENT_DATE_TIME,18,19))),
-           arrival_time =
-             (as.numeric(substr(ARRIVAL_DATE_TIME,12,13))*3600) +
-             (as.numeric(substr(ARRIVAL_DATE_TIME,15,16))*60) +
-             (as.numeric(substr(ARRIVAL_DATE_TIME,18,19)))) %>%
-    mutate(dep_time = arrival_time - depart_time) %>%
-    select(dep_time)
+  #create list of each element we want
+  elements1 <- list(get_deployment_time(df), get_inteventions_per_box(df), get_nb_units(df))
 
-  #number interventions by day and boxes
-  nb_days <- as.Date(as.character(substr(tail(mod2$INCIDENT_DATE_TIME, 1), 1, 10)), format="%Y-%m-%d")-
-    as.Date(as.character(substr(head(mod2$INCIDENT_DATE_TIME, 1), 1, 10)), format="%Y-%m-%d")
-
-  nb_days <- as.numeric(nb_days)
-
-  inteventions_per_box <- df %>%
-    group_by(FIRE_BOX) %>%
-    summarise(total = n()/nb_days)
-
-  #get number of units
-nb_units <-
+  #extract col from each element of the list
+  elements2 <- map(elements1, "col") %>%
+    set_names(c("dep_time", "interv_per_box", "nb_units"))
 
 
-  return(df)
+  stat_df <- map_dfr(elements2, build_stat_df, .id = "statistic")
+
+  return(stat_df)
 }
