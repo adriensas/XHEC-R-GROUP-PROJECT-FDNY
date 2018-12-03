@@ -9,6 +9,6 @@
 #' @rdname mean-deployment-time
 #'
 
-mean_deployment_time <- function(df, time_step) {
+mean_deployment_time <- function(df) {
 
 }
