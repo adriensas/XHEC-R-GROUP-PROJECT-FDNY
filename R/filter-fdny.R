@@ -11,7 +11,7 @@
 
 filter_fdny <- function(df, input) {
 
-filtered_df <- df %>%
+  filtered_df <- df %>%
     filter(INCIDENT_DATE_TIME >= input$time_interval[1], INCIDENT_DATE_TIME <= input$time_interval[2]) %>%
     filter(ZIP_CODE %in% input$zip_code) %>%
     filter(INCIDENT_TYPE_DESC %in% input$type) %>%

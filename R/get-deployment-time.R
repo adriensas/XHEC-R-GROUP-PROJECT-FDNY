@@ -13,7 +13,6 @@
 get_deployment_time <- function(df) {
 
   #compute column for deployment time
-  #TODO how to return an error if negative in a clean way?
   deployment_time <- df %>%
     mutate(col = as.numeric(INCIDENT_DATE_TIME) - as.numeric(ARRIVAL_DATE_TIME)) %>%
     select(col)
