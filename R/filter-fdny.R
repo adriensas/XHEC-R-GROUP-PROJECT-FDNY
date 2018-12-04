@@ -10,12 +10,23 @@
 #'
 
 filter_fdny <- function(df, input) {
-
+  if(length(input$time_interval) == 0) {
+    stop("A date  interval must be specified !")
+  }
   filtered_df <- df %>%
-    filter(INCIDENT_DATE_TIME >= input$time_interval[1], INCIDENT_DATE_TIME <= input$time_interval[2]) %>%
-    filter(ZIP_CODE %in% input$zip_code) %>%
-    filter(INCIDENT_TYPE_DESC %in% input$type) %>%
-    filter(HIGHEST_LEVEL_DESC %in% input$magnitude)
+    filter(INCIDENT_DATE_TIME >= input$time_interval[1], INCIDENT_DATE_TIME <= input$time_interval[2])
+  if(length(input$zip_code) > 0) {
+    filtered_df <- filtered_df %>%
+      filter(as.character(ZIP_CODE) %in% input$zip_code)
+  }
+  if(length(input$type) > 0) {
+    filtered_df <- filtered_df %>%
+      filter(INCIDENT_TYPE_DESC %in% input$type)
+  }
+  if(length(input$magnitude) > 0) {
+    filtered_df <- filtered_df %>%
+      filter(INCIDENT_TYPE_DESC %in% input$magnitude)
+  }
 
   return(filtered_df)
 }

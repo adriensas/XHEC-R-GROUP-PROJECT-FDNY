@@ -12,6 +12,10 @@ input$time_interval = c(
   )
 filtered.data <- filter_fdny(data.test, input)
 
+test_that("There is actually elements in the filtered data frame :", {
+  expect_equal(dim(filtered.data)[1] > 0, TRUE)
+})
+
 test_that("It gives a subset of the full df :", {
   filtered_key <- filtered.data %>%
     select("IM_INCIDENT_KEY") %>%
@@ -31,8 +35,8 @@ test_that("ZIP_CODE is fitered as expected :", {
 test_that("DATE is fitered as expected :", {
   dim.error <- filtered.data %>%
     filter(
-            INCIDENT_DATE_TIME < input$TIME_INTERVAL[1],
-            INCIDENT_DATE_TIME > input$TIME_INTERVAL[2]
-           ) %>% dim()
+     INCIDENT_DATE_TIME < input$time_interval[1],
+     INCIDENT_DATE_TIME > input$time_interval[2]
+    ) %>% dim()
   expect_equal(dim.error[1], 0)
 })

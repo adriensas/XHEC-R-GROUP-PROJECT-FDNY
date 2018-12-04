@@ -12,5 +12,6 @@ usethis::use_test("get_deployment_time")
 usethis::use_test("get_intervention_duration")
 usethis::use_test("get_inteventions_per_box")
 usethis::use_test("get_nb_units")
+usethis::use_test("statistic_fdny")
 
 devtools::check()
