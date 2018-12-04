@@ -12,7 +12,7 @@
 get_inteventions_per_box <- function(df) {
 
   #number interventions by day and boxes
-  nb_days <- as.numeric(max(df$INCIDENT_DATE_TIME) - min(df$INCIDENT_DATE_TIME))/24*60*60
+  nb_days <- 1 + as.numeric(trunc(max(df$INCIDENT_DATE_TIME), units = "days") - trunc(min(df$INCIDENT_DATE_TIME), units = "days"))
 
   interventions_per_box <- df %>%
     group_by(FIRE_BOX) %>%

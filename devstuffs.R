@@ -10,5 +10,7 @@ install.packages("testthat")
 usethis::use_test("filter")
 usethis::use_test("get_deployment_time")
 usethis::use_test("get_intervention_duration")
+usethis::use_test("get_inteventions_per_box")
+usethis::use_test("get_nb_units")
 
 devtools::check()
