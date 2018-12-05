@@ -58,8 +58,7 @@ nyc_map_firebox_full <- nyc_map_firebox_full %>%
   mutate(Name = factor(Name))
 
 plot(nyc_map_firebox_full %>% select(Name))
-
-
+0
 
 #Clean solution
 layer_open <- function(i){
