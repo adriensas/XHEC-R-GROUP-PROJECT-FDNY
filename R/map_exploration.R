@@ -155,4 +155,18 @@ layer_open <- function(i){
 }
 
 nyc_map_firebox <- rbind(lapply(X = 1:9, layer_open))
->>>>>>> 54058bf148069aba391d4097d758b429a04df51d
+
+## Function to plot only a part of the map
+PlotFireDiv <- function(filter){ #filter has to be a column name of the data set and level an admissible level
+  #if( !(filter %in% colnames(nyc_map_fc)) ) stop("The selected filter is not admissible")
+  nyc_map_fc %>% filter(filter == 2)
+  #plot(st_geometry(nyc_map_fc %>% filter(filter == level)))
+}
+
+Plot <- function(FireDiv){
+  plot(st_geometry(nyc_map_fc %>% filter(FireDiv == FireDiv)))
+}
+
+Plot2 <- function(filter){
+  #plot(st_geometry(nyc_map_fc %>% filter(filter == 2)))
+  head(nyc_map_fc %>% filter(as.factor(filter) == 2),20)
