@@ -7,8 +7,11 @@ library(knitr)
 install.packages("testthat")
 
 # Create the tests
-usethis::use_test("mean_per_time_step")
 usethis::use_test("filter")
-usethis::use_test("mean_deployment_time")
+usethis::use_test("get_deployment_time")
+usethis::use_test("get_intervention_duration")
+usethis::use_test("get_inteventions_per_box")
+usethis::use_test("get_nb_units")
+usethis::use_test("statistic_fdny")
 
 devtools::check()
