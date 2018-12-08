@@ -57,8 +57,8 @@ nyc_map_firebox_full <- rbind(layer1, layer2, layer3, layer4, layer5, layer6, la
 nyc_map_firebox_full <- nyc_map_firebox_full %>% 
   mutate(Name = factor(Name))
 
-plot(nyc_map_firebox_full %>% select(Name))
-0
+plot(nyc_map_firebox_full %>% select(Name)) #We need to have the same firebox codes in the original dataset (ie have the letter indicating the borough)
+
 
 #Clean solution
 layer_open <- function(i){
