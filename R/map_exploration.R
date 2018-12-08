@@ -56,7 +56,13 @@ layer9 = st_read(dsn = "data/FDNY_Box_Locations.kml",
 nyc_map_firebox_full <- rbind(layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9)
 
 nyc_map_firebox_full <- nyc_map_firebox_full %>% 
-  mutate(Name = factor(Name))
+  mutate(Name = factor(Name),
+         Borough = case_when(
+           substr(Name, 1, 1) == "Q" ~ "Queens",
+           substr(Name, 1, 1) == "M" ~ "Manhattan",
+           substr(Name, 1, 1) == "B" ~ "Brooklyn",
+           substr(Name, 1, 1) == "X" ~ "Bronx",
+           substr(Name, 1, 1) == "R" ~ "Staten Island")
 
 plot(nyc_map_firebox_full %>% select(Name)) #We need to have the same firebox codes in the original dataset (ie have the letter indicating the borough)
 
@@ -170,3 +176,10 @@ Plot <- function(FireDiv){
 Plot2 <- function(filter){
   #plot(st_geometry(nyc_map_fc %>% filter(filter == 2)))
   head(nyc_map_fc %>% filter(as.factor(filter) == 2),20)
+  
+  
+<<<<<<< HEAD
+=======
+  
+>>>>>>> 54058bf148069aba391d4097d758b429a04df51d
+>>>>>>> 1dbbc0bb69c9e67c5df883444dc871fd292d3019
