@@ -11,12 +11,17 @@ tidy_incidents <- incidents %>%
          HIGHEST_LEVEL_DESC,
          ZIP_CODE,
          BOROUGH_DESC) %>%
+  mutate(FIRE_BOX = case_when(BOROUGH_DESC == "1 - Manhattan" ~ paste0("M", FIRE_BOX),
+                              BOROUGH_DESC == "2 - Bronx" ~ paste0("X", FIRE_BOX),
+                              BOROUGH_DESC == "3 - Staten Island" ~ paste0("R", FIRE_BOX),
+                              BOROUGH_DESC == "4 - Brooklyn" ~ paste0("B", FIRE_BOX),
+                              BOROUGH_DESC == "5 - Queens" ~ paste0("Q", FIRE_BOX),
+                              TRUE ~ FIRE_BOX)) %>%
   mutate(FIRE_BOX = factor(FIRE_BOX),
          INCIDENT_TYPE_DESC = factor(INCIDENT_TYPE_DESC),
          INCIDENT_DATE_TIME = as.POSIXct(INCIDENT_DATE_TIME),
          ARRIVAL_DATE_TIME = as.POSIXct(ARRIVAL_DATE_TIME),
          LAST_UNIT_CLEARED_DATE_TIME = as.POSIXct(LAST_UNIT_CLEARED_DATE_TIME),
-         UNITS_ONSCENE = factor(UNITS_ONSCENE, ordered = TRUE),
          HIGHEST_LEVEL_DESC = factor(str_sub(HIGHEST_LEVEL_DESC, 1, 1), ordered = TRUE),
          ZIP_CODE = factor(ZIP_CODE),
          BOROUGH_DESC = factor(BOROUGH_DESC)) %>%
