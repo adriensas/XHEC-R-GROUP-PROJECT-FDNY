@@ -7,27 +7,24 @@ library("tidyverse")
 library("rgdal")
 library("xml2")
 
-#Loading the firebox data, in order to merge the intervention data with the map
-nyc_map_firebox <- st_read(dsn = "data/FDNY_Box_Locations.kml")
-
-#Merging the file data
-layer1 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+#Loading and merging the firebox data
+layer1 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_1.csv")
-layer2 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer2 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_2.csv")
-layer3 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer3 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_3.csv")
-layer4 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer4 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_4.csv")
-layer5 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer5 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_5.csv")
-layer6 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer6 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_6.csv")
-layer7 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer7 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_7.csv")
-layer8 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer8 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_8.csv")
-layer9 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+layer9 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
                  layer = "Fire_Boxes_9.csv")
 nyc_map_firebox_full <- rbind(layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9)
 
