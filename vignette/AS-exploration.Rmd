@@ -1,0 +1,361 @@
+---
+title: "AS-exploration"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Exploration of the data
+
+### Library load
+
+```{r}
+library(readr)
+library(dplyr)
+library(tidyverse)
+library(lubridate)
+library(sf)
+```
+
+
+### Data Load
+
+```{r}
+data.raw <- read_csv("../data-raw/incidents-responded-to-by-fire-companies.csv")
+```
+
+### Actual exploration
+
+What are the column ?
+```{r}
+head(data.raw)
+glimpse(data.raw)
+```
+
+
+Improve data format (optimisation)
+
+```{r}
+data.use <- data.raw %>% mutate(
+  INCIDENT_TYPE_DESC=as.factor(INCIDENT_TYPE_DESC),
+  HIGHEST_LEVEL_DESC=as.factor(HIGHEST_LEVEL_DESC),
+  ACTION_TAKEN1_DESC=as.factor(ACTION_TAKEN1_DESC),
+  ACTION_TAKEN2_DESC=as.factor(ACTION_TAKEN2_DESC),
+  ACTION_TAKEN3_DESC=as.factor(ACTION_TAKEN3_DESC),
+  PROPERTY_USE_DESC=as.factor(PROPERTY_USE_DESC),
+  BOROUGH_DESC=as.factor(BOROUGH_DESC),
+  PROPERTY_USE_DESC=as.factor(PROPERTY_USE_DESC),
+  STREET_HIGHWAY=as.factor(STREET_HIGHWAY),
+  ZIP_CODE=as.factor(ZIP_CODE),
+  INCIDENT_DATE_TIME=as.Date(INCIDENT_DATE_TIME),
+  ARRIVAL_DATE_TIME=as.Date(ARRIVAL_DATE_TIME),
+  LAST_UNIT_CLEARED_DATE_TIME=as.Date(LAST_UNIT_CLEARED_DATE_TIME)
+  )
+save(data.use, file = "../data-raw/data.RData")
+data.use %>% select(ZIP_CODE) %>% unique()
+```
+
+```{r}
+firerelatedIncident <- data.raw %>% group_by(INCIDENT_TYPE_DESC) %>% summarise(n=n()) %>% filter(grepl('fire|smoke', tolower(INCIDENT_TYPE_DESC)) & !grepl('no fire', tolower(INCIDENT_TYPE_DESC))) %>% filter(n>200)
+ggplot(data = firerelatedIncident, aes(x=INCIDENT_TYPE_DESC, y=n)) +geom_bar(stat="identity")
+data.use <- data.use %>%  filter(INCIDENT_TYPE_DESC %in% (firerelatedIncident %>% pull(INCIDENT_TYPE_DESC)))
+```
+
+## Nb intervention par période par quartier
+
+```{r}
+# Count by borough
+data.perweekday <- data.use %>% 
+  group_by(BOROUGH_DESC, weekdays(INCIDENT_DATE_TIME)) %>% 
+  summarize(n=n()) #%>% 
+  #spread(key = BOROUGH_DESC, value = n)
+data.perweeknb <- data.use %>% 
+  group_by(BOROUGH_DESC, WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>%
+  summarize(n=n())
+
+data.perweeknb.Years <- data.use %>% 
+  group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>% 
+  summarize(n=n()) %>%
+  ungroup() %>% 
+  filter(YEAR!=2018) %>% 
+  group_by(WEEK_NB) %>%
+  summarise(VAR=sqrt(var(n)))
+```
+
+```{r}
+ggplot(
+  data=data.perweeknb,
+  aes(x=WEEK_NB, y=n, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+  data=data.perweekday %>% mutate(ID=row_number()),
+  aes(x=ID, y=n, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+    data=data.perweeknb.Years,
+    aes(x=WEEK_NB, y=VAR)
+  ) +
+  geom_point() +
+  geom_line()
+```
+
+## Mean ncident duration per period / week day
+
+```{r}
+# Mean by borough
+data.time.perweekday <- data.use %>% 
+  filter(!is.na(TOTAL_INCIDENT_DURATION)) %>% 
+  group_by(BOROUGH_DESC, weekdays(INCIDENT_DATE_TIME)) %>% 
+  summarize(MEAN_TIME=mean(TOTAL_INCIDENT_DURATION)) %>% 
+  filter(MEAN_TIME<10000)
+
+data.time.perweeknb <- data.use %>%
+  filter(!is.na(TOTAL_INCIDENT_DURATION)) %>%
+  group_by(BOROUGH_DESC, WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>% 
+  summarize(MEAN_TIME=mean(TOTAL_INCIDENT_DURATION)) %>% 
+  filter(MEAN_TIME<10000)
+```
+
+```{r}
+ggplot(
+  data=data.time.perweeknb,
+  aes(x=WEEK_NB, y=MEAN_TIME, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+  data=data.time.perweekday %>% mutate(ID=row_number()),
+  aes(x=ID, y=MEAN_TIME, color = BOROUGH_DESC, linetype = BOROUGH_DESC)
+  ) +
+  geom_point() +
+  geom_line()
+```
+### Year Compartison
+
+```{r}
+data.time.year.perweeknb.var <- data.use %>%
+  filter(!is.na(TOTAL_INCIDENT_DURATION)) %>%
+  group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>% 
+  summarize(MEAN_TIME=mean(TOTAL_INCIDENT_DURATION)) %>% 
+  filter(MEAN_TIME<10000) %>% 
+  ungroup() %>% 
+  filter(YEAR!=2018) %>% 
+  group_by(WEEK_NB) %>%
+  summarise(VAR=sqrt(var(MEAN_TIME)))
+```
+
+```{r}
+ggplot(
+  data=data.time.year.perweeknb.var,
+  aes(x=WEEK_NB, y=VAR)
+  ) +
+  geom_point() +
+  geom_line()
+```
+
+
+## Mean number of cars
+
+```{r}
+# Count by borough
+data.perweekday.units <- data.use %>% 
+  filter(!is.na(UNITS_ONSCENE)) %>% 
+  group_by(BOROUGH_DESC, weekdays(INCIDENT_DATE_TIME)) %>% 
+  summarize(n=mean(UNITS_ONSCENE))
+
+data.perweeknb.units <- data.use %>% 
+  filter(!is.na(UNITS_ONSCENE)) %>% 
+  group_by(BOROUGH_DESC, WEEK_NB = as.numeric(strftime(INCIDENT_DATE_TIME,format="%W"))) %>%
+  summarize(n=mean(UNITS_ONSCENE))
+```
+
+# Per day analysis
+
+```{r}
+data.perweekday <- data.use %>%
+  group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), DAY_DATE = strftime(INCIDENT_DATE_TIME,format="%m-%d")) %>% 
+  summarize(n=n(), FULL_DATE = date(strftime(INCIDENT_DATE_TIME,format="%Y-%m-%d")[[1]])) %>%
+  mutate(DAY = row_number())
+
+ggplot(
+  data=data.perweekday,
+  aes(x=DAY, y=n, color = YEAR, linetype = YEAR)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+  data=data.perweekday %>% filter(YEAR==2017),
+  aes(x=DAY, y=n)
+  ) +
+  geom_point() +
+  geom_line()
+ggplot(
+  data=data.perweekday %>% filter(YEAR==2016),
+  aes(x=DAY, y=n)
+  ) +
+  geom_point() +
+  geom_line()
+```
+
+```{r}
+data.perweekday %>% 
+  group_by(YEAR) %>%
+  filter(n >= quantile(n,0.85)) %>%
+  ungroup() %>% 
+  group_by(DAY_DATE) %>% 
+  summarise(n = n()) %>% 
+  filter(n>=3)
+```
+
+
+```{r}
+holiday.raw <- read_csv("../data-raw/usholidays.csv") %>% filter(Date>="2013-01-01")
+```
+
+```{r}
+data.perweekday.holiday <- data.perweekday %>% 
+  left_join(
+    holiday.raw %>% select(-X1),
+    by=c("FULL_DATE"="Date")
+  )
+influencialHoliday <- data.perweekday.holiday %>% 
+  group_by(YEAR) %>%
+  filter(n >= quantile(n,0.85)) %>%
+  ungroup() %>% 
+  group_by(Holiday) %>% 
+  summarise(n = n()) %>% 
+  filter(n>=2) %>% 
+  na.omit() %>% 
+  pull(Holiday)
+```
+
+```{r}
+data.perweekday.zip_code <- data.use %>%
+  group_by(YEAR = strftime(INCIDENT_DATE_TIME,format="%Y"), DAY_DATE = strftime(INCIDENT_DATE_TIME,format="%m-%d"), ZIP_CODE) %>% 
+  summarize(n=n(), FULL_DATE = date(strftime(INCIDENT_DATE_TIME,format="%Y-%m-%d")[[1]])) %>%
+  mutate(DAY = row_number())%>% 
+  left_join(
+    holiday.raw %>% select(-X1),
+    by=c("FULL_DATE"="Date")
+  ) %>% 
+  filter(Holiday %in% influencialHoliday)
+```
+
+```{r}
+# for loop but for 4 element only
+temp1 <- data.use %>% 
+  select(ZIP_CODE) %>% 
+  unique() %>% 
+  merge(influencialHoliday) %>% 
+  arrange(desc(ZIP_CODE)) %>% 
+  rename("Holiday" = "y") %>% 
+  mutate(Holiday = as.character(Holiday))
+
+temp <- data.perweekday.zip_code %>% 
+  group_by(ZIP_CODE, Holiday, YEAR) %>% 
+  summarise(n=sum(n)) %>% 
+  ungroup() %>% 
+  right_join(temp1, by=c("Holiday", "ZIP_CODE")) %>% 
+  mutate(n = ifelse(is.na(n),0,n)) %>% 
+  mutate(ZIP_CODE=as.character(ZIP_CODE))
+
+ggplot(data = temp %>% filter(Holiday=="Christmas Day"),aes(x = ZIP_CODE, y=n, color=YEAR)) + geom_bar(stat = "identity")
+ggplot(data = temp %>% filter(Holiday=="New Year's Day"),aes(x = ZIP_CODE, y=n, color=YEAR)) + geom_bar(stat = "identity")
+ggplot(data = temp %>% filter(Holiday=="Thanksgiving Day"),aes(x = ZIP_CODE, y=n, color=YEAR)) + geom_bar(stat = "identity")
+ggplot(data = temp %>% filter(Holiday=="Washington's Birthday"),aes(x = ZIP_CODE, y=n, color=YEAR)) + geom_bar(stat = "identity")
+```
+
+```{r}
+ggplot(data = temp %>% filter(Holiday=="Thanksgiving Day", YEAR==2013),aes(x = ZIP_CODE, y=n, label=ZIP_CODE)) + geom_bar(stat = "identity") + coord_flip()
+ggplot(data = temp %>% filter(Holiday=="Thanksgiving Day", YEAR==2014),aes(x = ZIP_CODE, y=n)) + geom_bar(stat = "identity")
+ggplot(data = temp %>% filter(Holiday=="Thanksgiving Day", YEAR==2015),aes(x = ZIP_CODE, y=n)) + geom_bar(stat = "identity")
+ggplot(data = temp %>% filter(Holiday=="Thanksgiving Day", YEAR==2016),aes(x = ZIP_CODE, y=n)) + geom_bar(stat = "identity")
+ggplot(data = temp %>% filter(Holiday=="Thanksgiving Day", YEAR==2017),aes(x = ZIP_CODE, y=n)) + geom_bar(stat = "identity")
+```
+
+
+```{r}
+neighborhood.data <- read_csv("../data-raw/nyc_neighborhood.csv") %>% select(-Borough)
+```
+
+```{r}
+temp2 <- temp %>% left_join(
+    neighborhood.data %>% mutate(measurement = as.character(measurement)),
+    by=c("ZIP_CODE"="measurement")
+  ) %>% 
+  na.omit() %>%
+  group_by(Neighborhood, YEAR, Holiday) %>% 
+  summarise(n=sum(n)) %>% 
+  ungroup()
+meanPerYearPerHoliPerNei <- temp2 %>% 
+  group_by(YEAR, Holiday) %>% 
+  summarise(total=sum(n)) %>% 
+  ungroup()
+temp3 <- temp2 %>% 
+  left_join(meanPerYearPerHoliPerNei, by=c("Holiday", "YEAR")) %>% 
+  mutate(n=100*n/total)
+plotPerYear <- function(hol){
+  plots1 <- ggplot(data = temp3 %>% filter(YEAR==2013, Holiday==hol),aes(x = Neighborhood, y=n)) + geom_bar(stat = "identity") + coord_cartesian(ylim = c(0, 7))
+  plots2 <- ggplot(data = temp3 %>% filter(YEAR==2014, Holiday==hol),aes(x = Neighborhood, y=n)) + geom_bar(stat = "identity") + coord_cartesian(ylim = c(0, 7))
+  plots3 <- ggplot(data = temp3 %>% filter(YEAR==2015, Holiday==hol),aes(x = Neighborhood, y=n)) + geom_bar(stat = "identity") + coord_cartesian(ylim = c(0, 7))
+  plots4 <- ggplot(data = temp3 %>% filter(YEAR==2016, Holiday==hol),aes(x = Neighborhood, y=n)) + geom_bar(stat = "identity") + coord_cartesian(ylim = c(0, 7))
+  plots5 <- ggplot(data = temp3 %>% filter(YEAR==2017, Holiday==hol),aes(x = Neighborhood, y=n)) + geom_bar(stat = "identity") + coord_cartesian(ylim = c(0, 7))
+   return(list(
+     plots1,
+     plots2,
+     plots3,
+     plots4,
+     plots5
+    ))
+}
+```
+
+```{r}
+plotPerYear("New Year's Day")
+```
+```{r}
+plotPerYear("Columbus Day")
+```
+
+```{r}
+plotPerYear("Thanksgiving Day")
+```
+
+```{r}
+plotPerYear("Washington's Birthday")
+```
+
+```{r}
+load("../data-raw/data.RData")
+```
+
+```{r}
+data.map <- data.use %>% 
+  filter(year(INCIDENT_DATE_TIME)==2014) %>% 
+  group_by(ZIP_CODE) %>%
+  summarise(n=n()) %>% 
+  mutate(ZIP_CODE=as.character(ZIP_CODE)) %>% 
+  select(ZIP_CODE, n)
+zip_new_york <- st_read(
+  dsn = "../data-raw/ZIP_CODE_040114/",
+  quiet = TRUE) %>%
+  st_transform(2154)
+zip_new_york.bis <- zip_new_york %>% 
+  left_join(
+    data.map,
+    by=c("ZIPCODE"="ZIP_CODE")
+  ) %>% 
+  mutate(n=ifelse(is.na(n),0,n)) %>% 
+  mutate(interv=n/POPULATION) %>% 
+  filter(interv<=1)
+
+ggplot(zip_new_york.bis) +
+  geom_sf(aes(fill = n))
+```
+
