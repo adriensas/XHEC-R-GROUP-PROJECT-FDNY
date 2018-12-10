@@ -22,7 +22,7 @@ nyfc_firebox <- st_read(dsn = "data/firebox.kml",
 plot_firebox <- function(x){
   if (str_sub(x,1,1) %in% c("B", "M", "Q", "R", "X") && str_length(x) == 5){
     tm_shape(nyfc_firebox %>% filter(Name %in% x)) +
-      tm_dots() +
+      tm_bubbles() +
       tm_shape(nyfc) +
       tm_borders()
   }
