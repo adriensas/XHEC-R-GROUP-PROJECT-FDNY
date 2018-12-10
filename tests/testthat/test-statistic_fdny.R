@@ -3,7 +3,9 @@ context("test-statistic_fdny")
 library(dplyr)
 library(purrr)
 
-data.test <- readRDS("../../data/fdny-data.rds")
+load("../../data/incidents.RData")
+
+data.test <- tidy_incidents
 
 input <- list()
 input$zip_code = c("10451")

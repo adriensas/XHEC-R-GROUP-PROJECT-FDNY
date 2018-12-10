@@ -1,8 +1,8 @@
 context("test-get_inteventions_per_box")
 
 test_data1 <- data.frame(
-  FIRE_BOX = c(1, 1, 1, 2, 3, 4, 3),
-  INCIDENT_DATE_TIME = c(
+  fire_box = c(1, 1, 1, 2, 3, 4, 3),
+  inc_time = c(
     as.POSIXct('2010/05/19 12:09:09'),
     as.POSIXct('2010/05/19 12:10:09'),
     as.POSIXct('2010/05/19 12:12:09'),
@@ -15,8 +15,8 @@ test_data1 <- data.frame(
 
 # The last date is different but should give the same result
 test_data2 <- data.frame(
-  FIRE_BOX = c(1, 1, 1, 2, 3, 4, 3),
-  INCIDENT_DATE_TIME = c(
+  fire_box = c(1, 1, 1, 2, 3, 4, 3),
+  inc_time = c(
     as.POSIXct('2010/05/19 12:09:09'),
     as.POSIXct('2010/05/19 12:10:09'),
     as.POSIXct('2010/05/19 12:12:09'),

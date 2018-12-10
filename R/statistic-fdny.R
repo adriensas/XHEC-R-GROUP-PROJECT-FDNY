@@ -29,7 +29,7 @@ statistic_fdny <- function(df, input){
 
   stat_df <- map_dfr(elements2, build_stat_df, .id = "statistic")
 
-  n_per_type <- filtered_df %>% group_by(INCIDENT_TYPE_DESC) %>% summarize(n = n())
+  n_per_type <- filtered_df %>% group_by(inc_type) %>% summarize(n = n())
 
   output <- list()
   output$filtered_df <- filtered_df

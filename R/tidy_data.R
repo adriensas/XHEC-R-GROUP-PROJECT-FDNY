@@ -1,3 +1,6 @@
+library(readr)
+library(dplyr)
+library(stringr)
 incidents <- read_csv("data/incidents.csv")
 
 tidy_incidents <- incidents %>%
