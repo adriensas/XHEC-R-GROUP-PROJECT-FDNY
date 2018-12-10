@@ -14,7 +14,7 @@ get_deployment_time <- function(df) {
 
   #compute column for deployment time
   deployment_time <- df %>%
-    mutate(col = as.numeric(ARRIVAL_DATE_TIME) - as.numeric(INCIDENT_DATE_TIME)) %>%
+    mutate(col = as.numeric(arr_time) - as.numeric(inc_time)) %>%
     select(col)
 
  return(deployment_time)
