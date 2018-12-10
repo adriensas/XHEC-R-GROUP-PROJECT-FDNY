@@ -62,7 +62,8 @@ nyc_map_firebox_full <- nyc_map_firebox_full %>%
            substr(Name, 1, 1) == "M" ~ "Manhattan",
            substr(Name, 1, 1) == "B" ~ "Brooklyn",
            substr(Name, 1, 1) == "X" ~ "Bronx",
-           substr(Name, 1, 1) == "R" ~ "Staten Island")
+           substr(Name, 1, 1) == "R" ~ "Staten Island",
+           TRUE ~ "AAA")
 
 plot(nyc_map_firebox_full %>% select(Name)) #We need to have the same firebox codes in the original dataset (ie have the letter indicating the borough)
 

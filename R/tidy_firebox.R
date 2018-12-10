@@ -1,0 +1,45 @@
+#install.packages("sf")
+#install.packages("raster")
+#install.packages("rgdal")
+library("sf")
+library("raster")
+library("tidyverse")
+library("rgdal")
+library("xml2")
+
+#Loading the firebox data, in order to merge the intervention data with the map
+nyc_map_firebox <- st_read(dsn = "data/FDNY_Box_Locations.kml")
+
+#Merging the file data
+layer1 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_1.csv")
+layer2 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_2.csv")
+layer3 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_3.csv")
+layer4 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_4.csv")
+layer5 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_5.csv")
+layer6 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_6.csv")
+layer7 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_7.csv")
+layer8 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_8.csv")
+layer9 = st_read(dsn = "data/FDNY_Box_Locations.kml",
+                 layer = "Fire_Boxes_9.csv")
+nyc_map_firebox_full <- rbind(layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9)
+
+
+nyc_map_firebox_full <- nyc_map_firebox_full %>% 
+  mutate(Name = factor(Name),
+         Borough = case_when(
+           substr(Name, 1, 1) == "Q" ~ "5 -Queens",
+           substr(Name, 1, 1) == "M" ~ "1 - Manhattan",
+           substr(Name, 1, 1) == "B" ~ "4 - Brooklyn",
+           substr(Name, 1, 1) == "X" ~ "2 - Bronx",
+           substr(Name, 1, 1) == "R" ~ "3 - Staten Island",
+           TRUE ~ "AAA"))
+         
+plot(nyc_map_firebox_full %>% select(Name))
