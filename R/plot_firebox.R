@@ -2,6 +2,7 @@
 #install.packages("raster")
 #install.packages("rgdal")
 #install.packages("tmap")
+#install.packages("leaflet")
 library("sf")
 library("raster")
 library("tidyverse")
@@ -9,6 +10,7 @@ library("rgdal")
 library("xml2")
 library("stringr")
 library("tmap")
+library("leaflet")
 
 nyfc <- st_read(dsn = "data/nyfc",
                 layer = "nyfc",
