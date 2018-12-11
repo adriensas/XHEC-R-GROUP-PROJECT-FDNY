@@ -18,12 +18,14 @@ nyfc_firebox <- st_read(dsn = "data/firebox.kml",
                 layer = "Fire_Boxes.csv",
                 quiet = TRUE)
 
+
 plot_firebox <- function(x){
   if (str_sub(x,1,1) %in% c("B", "M", "Q", "R", "X") && str_length(x) == 5){
-    tm_shape(nyfc_firebox %>% filter(Name %in% x)) +
-      tm_bubbles() +
-      tm_shape(nyfc) +
-      tm_borders()
+    nyfc_firebox %>% 
+      filter(Name %in% x) %>%
+      leaflet() %>%
+      addProviderTiles("CartoDB") %>%
+      addMarkers()
   }
   else {
     "Please enter a correct firebox number."
