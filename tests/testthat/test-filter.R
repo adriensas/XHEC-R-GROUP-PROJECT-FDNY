@@ -12,6 +12,7 @@ input$time_interval = c(
     as.POSIXct(1417343844, origin='1970-01-01'),
     as.POSIXct(1427343844, origin='1970-01-01')
   )
+input$units = c(1,2,3)
 filtered.data <- filter_fdny(data.test, input)
 
 test_that("There is actually elements in the filtered data frame :", {
