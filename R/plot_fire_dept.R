@@ -2,6 +2,8 @@ nyfc <- st_read(dsn = "data/nyfc",
                 layer = "nyfc",
                 quiet = TRUE)
 
+save(nyfc, file = "data/nyfc.RData")
+
 nyfc <- nyfc %>%
   mutate(FireCoNum = factor(FireCoNum),
          FireBN = factor(FireBN),
