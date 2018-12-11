@@ -25,7 +25,7 @@ filter_fdny <- function(df, input) {
   }
   if(length(input$magnitude) > 0) {
     filtered_df <- filtered_df %>%
-      filter(inc_type %in% input$magnitude)
+      filter(inc_level %in% input$magnitude)
   }
 
   return(filtered_df)
