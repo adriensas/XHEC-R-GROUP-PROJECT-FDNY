@@ -2,29 +2,43 @@ context("test-filter")
 
 library(dplyr)
 
-load("../../data-raw/data.RData")
+load("../../data/incidents.RData")
+
+data.test <- tidy_incidents
 
 input <- list()
-input$ZIP_CODE = "10451"
-input$TIME_INTERVAL = c(1417343844, 1432982244)
-filtered.data <- filter_fdny(data.use, input)
+input$zip_code = c("10451")
+input$time_interval = c(
+    as.POSIXct(1417343844, origin='1970-01-01'),
+    as.POSIXct(1427343844, origin='1970-01-01')
+  )
+filtered.data <- filter_fdny(data.test, input)
+
+test_that("There is actually elements in the filtered data frame :", {
+  expect_equal(dim(filtered.data)[1] > 0, TRUE)
+})
 
 test_that("It gives a subset of the full df :", {
-  expect_equal(filtered.data %>% arrange(IM_INCIDENT_KEY) %>% head(dim(data.use)[1]),
-               data.use
-              )
+  filtered_key <- filtered.data %>%
+    select("id") %>%
+    unique() %>%
+    pull()
+  expect_equal(
+    filtered.data,
+    data.test %>% filter(id %in% filtered_key)
+  )
 })
 
-test_that("ZIP_CODE is fitered as expected :", {
-  dim.error <- filtered.data %>% filter(ZIP_CODE != input$ZIP_CODE) %>% dim()
-  expect_equal(dim.error, 0)
+test_that("zip_code is fitered as expected :", {
+  dim.error <- filtered.data %>% filter(!(zip_code %in% input$zip_code)) %>% dim()
+  expect_equal(dim.error[1], 0)
 })
 
-test_that("DATE is fitered as expected :", {
+test_that("date is fitered as expected :", {
   dim.error <- filtered.data %>%
     filter(
-            as.numeric(INCIDENT_DATE_TIME) < input$TIME_INTERVAL[1],
-            as.numeric(INCIDENT_DATE_TIME) > input$TIME_INTERVAL[2]
-           )
-  expect_equal(dim.error, 0)
+     inc_time < input$time_interval[1],
+     inc_time > input$time_interval[2]
+    ) %>% dim()
+  expect_equal(dim.error[1], 0)
 })
