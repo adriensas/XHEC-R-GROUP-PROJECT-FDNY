@@ -25,7 +25,18 @@ filter_fdny <- function(df, input) {
   }
   if(length(input$magnitude) > 0) {
     filtered_df <- filtered_df %>%
-      filter(inc_type %in% input$magnitude)
+      filter(inc_level %in% input$magnitude)
+  }
+  if(length(input$district) > 0) {
+    filtered_df <- filtered_df %>%
+      filter(borough %in% input$district)
+  }
+  if(length(input$time) > 0) {
+    filtered_df <- filtered_df %>%
+      filter(as.numeric(format(as.POSIXct(filtered_df$inc_time, format="%Y-%m-%d %H:%M:%S"),
+                               format="%H")) >= input$time[1],
+             as.numeric(format(as.POSIXct(filtered_df$inc_time, format="%Y-%m-%d %H:%M:%S"),
+                               format="%H")) <= input$time[2])
   }
 
   return(filtered_df)
