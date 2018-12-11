@@ -41,6 +41,14 @@ server <- function(input, output, session) {
                         arrange(inc_level)
     )
 
+    updateSelectInput(session = session,
+                      inputId = "district",
+                      choices = tidy_incidents %>%
+                        dplyr::select(borough) %>%
+                        distinct(borough) %>%
+                        arrange(borough)
+    )
+
 
     #Run the functions on the data
     res <- reactive({statistic_fdny(tidy_incidents, input)})

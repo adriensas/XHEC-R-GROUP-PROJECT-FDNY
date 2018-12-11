@@ -65,8 +65,13 @@ ui <- function() {
                 selectInput("magnitude",
                             label = "Incident Magnitude",
                             multiple = TRUE,
-                            choices = NULL)
-              ),
+                            choices = NULL),
+
+              selectInput("district",
+                          label = "District",
+                          multiple = TRUE,
+                          choices = NULL)
+            ),
 
               tabBox(
                 title = "Data to plot",

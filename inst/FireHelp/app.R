@@ -1,5 +1,4 @@
 library(shiny)
-library(appprenom)
 library(shinydashboard)
 library(leaflet)
 library(tidyverse)
