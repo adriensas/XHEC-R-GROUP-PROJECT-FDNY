@@ -4,7 +4,7 @@
 #' @param input shiny /list/ inputs
 #'
 #' @return subset of the param data frame filtered following the input
-#'
+#' @import dplyr
 #' @export
 #' @rdname filter-fdny
 #'

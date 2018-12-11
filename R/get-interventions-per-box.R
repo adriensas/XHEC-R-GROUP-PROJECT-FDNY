@@ -5,6 +5,7 @@
 #'
 #' @return data frame filtered and data frame with corresponding statistics
 #'
+#' @import dplyr
 #' @export
 #' @rdname statistic-fdny
 #'
@@ -17,7 +18,7 @@ get_inteventions_per_box <- function(df) {
   interventions_per_box <- df %>%
     group_by(fire_box) %>%
     summarise(col = n()/nb_days) %>%
-    select(col)
+   dplyr::select(col)
 
   return(interventions_per_box)
 }

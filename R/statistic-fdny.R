@@ -4,6 +4,7 @@
 #' @param input shiny /list/ inputs
 #'
 #' @return data frame filtered and data frame with corresponding statistics
+#' @import dplyr
 #'
 #' @export
 #' @rdname statistic-fdny

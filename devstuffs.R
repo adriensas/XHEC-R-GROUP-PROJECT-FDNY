@@ -15,3 +15,8 @@ usethis::use_test("get_nb_units")
 usethis::use_test("statistic_fdny")
 
 devtools::check()
+
+devtools::load_all()
+
+load("../data/incidents.RData")
+devtools::use_data(tidy_incidents, tidy_incidents)
