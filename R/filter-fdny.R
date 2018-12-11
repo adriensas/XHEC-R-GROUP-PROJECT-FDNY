@@ -27,6 +27,10 @@ filter_fdny <- function(df, input) {
     filtered_df <- filtered_df %>%
       filter(inc_level %in% input$magnitude)
   }
+  if(length(input$district) > 0) {
+    filtered_df <- filtered_df %>%
+      filter(borough %in% input$district)
+  }
 
   return(filtered_df)
 }
