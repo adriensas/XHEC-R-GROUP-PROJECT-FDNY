@@ -39,8 +39,11 @@ shinyServer(function(input, output, session) {
     if(length(input$time_interval) == 0) {
       stop("A date  interval must be specified !")
     }
-    filtered_df <- df %>%
-      filter(inc_time >= input$time_interval[1], inc_time <= input$time_interval[2])
+    filtered_df <- df
+    if(input$time_interval[2]-input$time_interval[1] != 0) {
+      filtered_df <- filtered_df %>%
+        filter(inc_time >= input$time_interval[1], inc_time <= input$time_interval[2])
+    }
     if(length(input$zip_code) > 0) {
       filtered_df <- filtered_df %>%
         filter(as.character(zip_code) %in% input$zip_code)
@@ -172,17 +175,16 @@ shinyServer(function(input, output, session) {
 
   #Run the functions on the data
   res <- reactive({statistic_fdny(tidy_incidents, input)})
-
   output$plot1 <- renderDataTable({
     res()$filtered_df
   })
 
   output$plot2 <- renderDataTable({
-    res()$stat_df
+    res()$statistic_df
   })
 
   output$plot3 <- renderDataTable({
-    res()$n_per_type
+    res()$number_intervention_per_type
   })
 
 
@@ -197,13 +199,13 @@ shinyServer(function(input, output, session) {
   library("stringr")
   library("tmap")
 
-  nyfc <- st_read(dsn = "C:/Users/Quentin/Desktop/MAP536R/Shiny_projectR/data/nyfc",
-                  layer = "nyfc",
-                  quiet = TRUE)
-
-  nyfc_firebox <- st_read(dsn = "C:/Users/Quentin/Desktop/MAP536R/Shiny_projectR/data/firebox.kml",
-                          layer = "Fire_Boxes.csv",
-                          quiet = TRUE)
+  #nyfc <- st_read(dsn = "C:/Users/Quentin/Desktop/MAP536R/Shiny_projectR/data/nyfc",
+  #                layer = "nyfc",
+  #                quiet = TRUE)
+#
+  #nyfc_firebox <- st_read(dsn = "C:/Users/Quentin/Desktop/MAP536R/Shiny_projectR/data/firebox.kml",
+  #                        layer = "Fire_Boxes.csv",
+  #                        quiet = TRUE)
 
   plot_firebox <- function(x){
     if (str_sub(x,1,1) %in% c("B", "M", "Q", "R", "X") && str_length(x) == 5){
