@@ -3,7 +3,9 @@ context("test-statistic_fdny")
 library(dplyr)
 library(purrr)
 
-data.test <- readRDS("../../data/fdny-data.rds")
+load("../../data/incidents.RData")
+
+data.test <- tidy_incidents
 
 input <- list()
 input$zip_code = c("10451")
@@ -14,9 +16,6 @@ input$time_interval = c(
 output_statistic <- statistic_fdny(data.test, input)
 
 test_that("We indeed have 3 data.frame as a result, with the correct names", {
-  warning(class(output_statistic$filtered_df))
-  warning(class(output_statistic$statistic_df))
-  warning(class(output_statistic$number_intervention_per_type))
   expect_equal(
     'data.frame' %in% class(output_statistic$filtered_df) &
     'data.frame' %in% class(output_statistic$statistic_df) &

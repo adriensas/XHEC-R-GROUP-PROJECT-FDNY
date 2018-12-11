@@ -13,8 +13,8 @@ get_nb_units <- function(df){
 
   #get number of units
   nb_units <- df %>%
-    select(UNITS_ONSCENE) %>%
-    rename(col = UNITS_ONSCENE)
+    select(units) %>%
+    rename(col = units)
 
   return(nb_units)
 
