@@ -13,50 +13,56 @@ library(shiny)
 shinyServer(function(input, output, session) {
   
   library(tidyverse)
-  library(ggplot2)
   
-  #Import of the tidy data
-  #load("C:/Users/Quentin/Desktop/projetR/shinyApp/FireHelp/data/incidents.RData")
+  load("C:/Users/Quentin/Desktop/MAP536R/Shiny_projectR/data/incidents.RData")
   
-  #Original data for layout - To delete
-  incidents <- read.csv('C:/Users/Quentin/Desktop/projetR/shinyApp/FireHelp/data/incidents.csv')
+  #Functions to delete after the packaging #####################################################################################
   
+  build_stat_df <- function(x){
   
+    if(is.null(x)){return("Appliquez des filtres")}
+    
+    max_no_na <- partial(max, na.rm = TRUE)
+    min_no_na <- partial(min, na.rm = TRUE)
+    mean_no_na <- partial(mean, na.rm = TRUE)
+    var_no_na <- partial(var, na.rm = TRUE)
+    
+    tibble(
+      min = min_no_na(x),
+      mean = mean_no_na(x),
+      var = var_no_na(x),
+      max = max_no_na(x)
+    )
+  }
   
-  #Functions Package (A MODIFIER SI LES FONCTIONS SONT CHARGEES AVEC LE PACKAGE) ########################
-  
-  #' Apply the filter to the main data frame
- 
   filter_fdny <- function(df, input) {
     if(length(input$time_interval) == 0) {
       stop("A date  interval must be specified !")
     }
     filtered_df <- df %>%
-      filter(INCIDENT_DATE_TIME >= input$time_interval[1], INCIDENT_DATE_TIME <= input$time_interval[2])
+      filter(inc_time >= input$time_interval[1], inc_time <= input$time_interval[2])
     if(length(input$zip_code) > 0) {
       filtered_df <- filtered_df %>%
-        filter(as.character(ZIP_CODE) %in% input$zip_code)
+        filter(as.character(zip_code) %in% input$zip_code)
     }
     if(length(input$type) > 0) {
       filtered_df <- filtered_df %>%
-        filter(INCIDENT_TYPE_DESC %in% input$type)
+        filter(inc_type %in% input$type)
     }
     if(length(input$magnitude) > 0) {
       filtered_df <- filtered_df %>%
-        filter(INCIDENT_TYPE_DESC %in% input$magnitude)
+        filter(inc_level %in% input$magnitude)
     }
     
     return(filtered_df)
   }
   
-  
-  #take a data frame as input and return a 1 column data frame of the deployment time for each intervention
   get_deployment_time <- function(df) {
     
     #compute column for deployment time
     deployment_time <- df %>%
-      mutate(col = as.numeric(ARRIVAL_DATE_TIME) - as.numeric(INCIDENT_DATE_TIME)) %>%
-      select(col)
+      mutate(col = as.numeric(arr_time) - as.numeric(inc_time)) %>%
+      dplyr::select(col)
     
     return(deployment_time)
     
@@ -65,8 +71,8 @@ shinyServer(function(input, output, session) {
   
   get_intervention_duration <- function(df) {
     intervention_duration <- df %>%
-      mutate(col = as.numeric(LAST_UNIT_CLEARED_DATE_TIME) - as.numeric(ARRIVAL_DATE_TIME)) %>%
-      select(col)
+      mutate(col = as.numeric(dep_time) - as.numeric(arr_time)) %>%
+      dplyr::select(col)
     
     return(intervention_duration)
   }
@@ -75,12 +81,12 @@ shinyServer(function(input, output, session) {
   get_inteventions_per_box <- function(df) {
     
     #number interventions by day and boxes
-    nb_days <- 1 + as.numeric(trunc(max(df$INCIDENT_DATE_TIME), units = "days") - trunc(min(df$INCIDENT_DATE_TIME), units = "days"))
+    nb_days <- 1 + as.numeric(trunc(max(df$inc_time), units = "days") - trunc(min(df$inc_time), units = "days"))
     
     interventions_per_box <- df %>%
-      group_by(FIRE_BOX) %>%
+      group_by(fire_box) %>%
       summarise(col = n()/nb_days) %>%
-      select(col)
+      dplyr::select(col)
     
     return(interventions_per_box)
   }
@@ -90,17 +96,13 @@ shinyServer(function(input, output, session) {
     
     #get number of units
     nb_units <- df %>%
-      select(UNITS_ONSCENE) %>%
-      rename(col = UNITS_ONSCENE)
+      dplyr::select(units) %>%
+      rename(col = units)
     
     return(nb_units)
     
   }
   
-  # End Functions Package ##############################################################################
-  
-  
-  # Fonction mère ##############################################################################
   
   statistic_fdny <- function(df, input){
     
@@ -122,7 +124,7 @@ shinyServer(function(input, output, session) {
     
     stat_df <- map_dfr(elements2, build_stat_df, .id = "statistic")
     
-    n_per_type <- filtered_df %>% group_by(INCIDENT_TYPE_DESC) %>% summarize(n = n())
+    n_per_type <- filtered_df %>% group_by(inc_type) %>% summarize(n = n())
     
     output <- list()
     output$filtered_df <- filtered_df
@@ -131,45 +133,106 @@ shinyServer(function(input, output, session) {
     return(output)
   }
   
-  # End Fonction mère ##############################################################################
+  #End functions to delete after packaging ######################################################################################
+ 
   
-  
-  
-  
-  
+  #Set the choices for the user
   updateSelectInput(session = session,
                     inputId = "fireboxSelect",
-                    choices = incidents %>% 
-                      select(FIRE_BOX) %>% 
-                      distinct(FIRE_BOX) %>% 
-                      arrange(FIRE_BOX)
+                    choices = tidy_incidents %>% 
+                      dplyr::select(fire_box) %>% 
+                      distinct(fire_box) %>% 
+                      arrange(fire_box)
   )   
   
   updateSelectInput(session = session,
                     inputId = "type",
-                    choices = incidents %>% 
-                      select(INCIDENT_TYPE_DESC) %>% 
-                      distinct(INCIDENT_TYPE_DESC) %>% 
-                      arrange(INCIDENT_TYPE_DESC)
+                    choices = tidy_incidents %>% 
+                      dplyr::select(inc_type) %>% 
+                      distinct(inc_type) %>% 
+                      arrange(inc_type)
   )   
   
   updateSelectInput(session = session,
                     inputId = "zip_code",
-                    choices = incidents %>% 
-                      select(ZIP_CODE) %>% 
-                      distinct(ZIP_CODE) %>% 
-                      arrange(ZIP_CODE)
+                    choices = tidy_incidents %>% 
+                      dplyr::select(zip_code) %>% 
+                      distinct(zip_code) %>% 
+                      arrange(zip_code)
+  )   
+  
+  updateSelectInput(session = session,
+                    inputId = "magnitude",
+                    choices = tidy_incidents %>% 
+                      dplyr::select(inc_level) %>% 
+                      distinct(inc_level) %>% 
+                      arrange(inc_level)
   )   
   
   
-  output$data <- renderDataTable({
-    incidents %>% head(100)
+  #Run the functions on the data 
+  res <- reactive({statistic_fdny(tidy_incidents, input)})
+  
+  output$plot1 <- renderDataTable({
+    res()$filtered_df 
   })
   
-  stat <- statistic_fdny(incidents, input)
-  
-  output$filtered_data <- renderDataTable({
-    stat$filtered_df
+  output$plot2 <- renderDataTable({
+    res()$stat_df
   })
- 
+  
+  output$plot3 <- renderDataTable({
+    res()$n_per_type
+  })
+  
+  
+  
+  #### MAP HENRI #################################################################################################################
+  
+  library("sf")
+  library("raster")
+  library("tidyverse")
+  library("rgdal")
+  library("xml2")
+  library("stringr")
+  library("tmap")
+  
+  nyfc <- st_read(dsn = "C:/Users/Quentin/Desktop/MAP536R/Shiny_projectR/data/nyfc",
+                  layer = "nyfc",
+                  quiet = TRUE)
+  
+  nyfc_firebox <- st_read(dsn = "C:/Users/Quentin/Desktop/MAP536R/Shiny_projectR/data/firebox.kml",
+                          layer = "Fire_Boxes.csv",
+                          quiet = TRUE)
+  
+  plot_firebox <- function(x){
+    if (str_sub(x,1,1) %in% c("B", "M", "Q", "R", "X") && str_length(x) == 5){
+      tm_shape(nyfc_firebox %>% filter(Name %in% x)) +
+        tm_bubbles() +
+        tm_shape(nyfc) +
+        tm_borders()
+    }
+    else {
+      "Please enter a correct firebox number."
+    }
+  }
+  
+  output$fire_map <- renderLeaflet({
+    plot_firebox(input$fireboxSelect)
+  })
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 })
