@@ -1,14 +1,15 @@
+nyfc_firebofireboxes <- read.csv("data/firebofireboxes.csv")
 
-firebox_layer <- function(fireboxes){
-  nyfc_firebox <- nyc_map_firebox_full
-  #if (str_sub(fireboxes,1,1) %in% c("B", "M", "Q", "R", "X") && str_length(fireboxes) == 5){
-    nyfc_firebox %>%
+plot_firebofireboxes <- function(fireboxes){
+  if (str_sub(fireboxes,1,1) %in% c("B", "M", "Q", "R", "fireboxes") && str_length(fireboxes) == 5){
+    nyfc_firebofireboxes %>% 
       filter(Name %in% fireboxes) %>%
       leaflet() %>%
       addProviderTiles("CartoDB") %>%
-      addMarkers()
-  #}
-  #else {
-  #  "Please enter a correct firebox number."
-  #}
+      addCircleMarkers(lng = ~lon, lat = ~lat, label = ~paste0("<b>", Name, "</b>", "<br/>", "num of interventions"), 
+        radius = 2, color = "red")
+  }
+  else {
+    "Please enter a correct firebofireboxes number."
+  }
 }
