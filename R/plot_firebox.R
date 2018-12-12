@@ -3,6 +3,7 @@
 #install.packages("rgdal")
 #install.packages("tmap")
 #install.packages("leaflet")
+#install.packages("htmltools")
 library("sf")
 library("raster")
 library("tidyverse")
@@ -11,6 +12,7 @@ library("fireboxesml2")
 library("stringr")
 library("tmap")
 library("leaflet")
+library("htmltools")
 
 nyfc <- st_read(dsn = "data/nyfc",
                 layer = "nyfc",
@@ -26,7 +28,7 @@ plot_firebox <- function(fireboxes){
       addProviderTiles("CartoDB", group = "CartoDB") %>%
       addProviderTiles("Esri", group = "Esri") %>%
       addLayersControl(baseGroups = c("CartoDB", "Esri")) %>% 
-      addCircleMarkers(lng = ~lon, lat = ~lat, label = ~paste0("<b>", Name, "</b>", "<br/>", "num of interventions"), 
+      addCircleMarkers(lng = ~lon, lat = ~lat, label = ~paste0("<b>", htmlEscape(Name), "</b>", "<br/>", "num of interventions"), 
         radius = 2, color = "red", clusterOptions = markerClusterOptions())
   }
   else {
@@ -37,7 +39,3 @@ plot_firebox <- function(fireboxes){
 #Intervention duration time : get_intervention_duration(fireboxes)
 #get_deployment_time(fireboxes)
 #get_nb_units(fireboxes)
-
-addSearchFeatures(options =
-                    searchFeaturesOptions(zoom = 10)
-                  targetGroups = 'Public')
