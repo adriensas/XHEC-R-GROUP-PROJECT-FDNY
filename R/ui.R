@@ -82,9 +82,12 @@ ui <- function() {
                   width = NULL,
                   collapsible = TRUE,
 
-                  checkboxInput("heatbox",
-                                label = "heatbox1",
-                                value = FALSE)
+                  selectInput("map_info",
+                              selected = "n",
+                              selectize = TRUE,
+                              label = "Information to display",
+                              multiple = FALSE,
+                              choices = c('n', 'mean_interv_time', 'mean_nb_units'))
 
                 )
 

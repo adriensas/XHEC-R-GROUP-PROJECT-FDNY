@@ -20,3 +20,8 @@ devtools::load_all()
 
 load("../data/incidents.RData")
 devtools::use_data(tidy_incidents, tidy_incidents)
+
+nyfc_zip <- st_read(dsn = "data/ZIP_CODE_040114",
+                    layer = "ZIP_CODE_040114",
+                    quiet = TRUE)
+devtools::use_data(nyfc_zip, nyfc_zip)

@@ -52,6 +52,7 @@ server <- function(input, output, session) {
 
     #Run the functions on the data
     res <- reactive({statistic_fdny(tidy_incidents, input)})
+    map_data_df <- reactive({compute_map_df(res()$filtered_df)})
     output$plot1 <- renderDataTable({
       print(res())
       res()$filtered_df
@@ -65,6 +66,6 @@ server <- function(input, output, session) {
       res()$number_intervention_per_type
     })
     output$fire_map <- renderLeaflet({
-      plot_firebox(input$fireboxSelect)
+      plot_leaflet_map(map_data_df(), input)
     })
 }
