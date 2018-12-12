@@ -14,11 +14,7 @@ library("tmap")
 library("leaflet")
 library("htmltools")
 
-nyfc <- st_read(dsn = "data/nyfc",
-                layer = "nyfc",
-                quiet = TRUE)
-
-nyfc_firebox <- read.csv("data/firebofireboxes.csv")
+nyfc_firebox <- read.csv("data/firebox.csv")
 
 plot_firebox <- function(fireboxes){
   if (str_sub(fireboxes,1,1) %in% c("B", "M", "Q", "R", "fireboxes") && str_length(fireboxes) == 5){
@@ -28,13 +24,15 @@ plot_firebox <- function(fireboxes){
       addProviderTiles("CartoDB", group = "CartoDB") %>%
       addProviderTiles("Esri", group = "Esri") %>%
       addLayersControl(baseGroups = c("CartoDB", "Esri")) %>% 
-      addCircleMarkers(lng = ~lon, lat = ~lat, label = ~paste0("<b>", htmlEscape(Name), "</b>", "<br/>", "num of interventions"),  radius = 2, color = "red", clusterOptions = markerClusterOptions())
+      addCircleMarkers(lng = ~lon, lat = ~lat, 
+                       label = ~paste0("<b>", htmlEscape(Name), "</b>", 
+                                       "<br/>", "Number of interventions: ", "get_inteventions_per_bofireboxes(fireboxes)",
+                                       "<br/>", "Number of units deployed: ", "get_nb_units(fireboxes)",
+                                       "<br/>", "Intervention duration: ", "get_intevention_duration(fireboxes)",
+                                       "<br/>", "Deployment time: ", "get_deployment_time(fireboxes)"),
+                       radius = 2, color = "red", clusterOptions = markerClusterOptions())
   }
   else {
     "Please enter a correct firebox number."
   }
 }
-#Number of intervention to be changed in : get_inteventions_per_bofireboxes(fireboxes)
-#Intervention duration time : get_intervention_duration(fireboxes)
-#get_deployment_time(fireboxes)
-#get_nb_units(fireboxes)
