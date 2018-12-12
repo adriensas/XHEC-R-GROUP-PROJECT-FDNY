@@ -30,10 +30,10 @@ layer9 = st_read(dsn = "data-raw/FDNY_Box_Locations.kml",
 nyc_map_firebox_full <- rbind(layer1, layer2, layer3, layer4, layer5, layer6, layer7, layer8, layer9)
 
 #Tidying the data
-nyc_map_firebox_full <- nyc_map_firebox_full %>% 
+nyc_map_firebox_full <- nyc_map_firebox_full %>%
   mutate(Name = factor(Name))
 
-#nyc_map_firebox_full <- nyc_map_firebox_full %>% 
+#nyc_map_firebox_full <- nyc_map_firebox_full %>%
 #  mutate(Borough = case_when(
 #           substr(Name, 1, 1) == "Q" ~ "5 - Queens",
 #           substr(Name, 1, 1) == "M" ~ "1 - Manhattan",
@@ -45,7 +45,8 @@ nyc_map_firebox_full <- nyc_map_firebox_full %>%
 #         Name = factor(Name))
 
 #Ploting the data
-plot(nyc_map_firebox_full %>% select(Name))
+plot(nyc_map_firebox_full %>% dplyr::select(Name))
 
 #Saving the new dataset
 st_write(nyc_map_firebox_full, "data/firebox.kml", "Fire_Boxes.csv")
+devtools::use_data(nyc_map_firebox_full, nyc_map_firebox_full)
