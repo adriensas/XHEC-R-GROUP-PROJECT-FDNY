@@ -47,5 +47,13 @@ nyc_map_firebox_full <- nyc_map_firebox_full %>%
 #Ploting the data
 plot(nyc_map_firebox_full %>% select(Name))
 
-#Saving the new dataset
-st_write(nyc_map_firebox_full, "data/firebox.kml", "Fire_Boxes.csv")
+#Saving the new dataset and tidying it
+st_write(nyc_map_firebox_full, "data/firebox.csv", layer_options = "GEOMETRY=AS_XY", delete_dsn = TRUE)
+
+firebox <- read.csv("data/firebox.csv")
+
+firebox <- firebox %>% 
+  rename(lon = X, 
+         lat = Y)
+
+write.csv(firebox, "data/firebox.csv")
