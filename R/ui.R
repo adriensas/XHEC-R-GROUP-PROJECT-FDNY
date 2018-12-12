@@ -47,6 +47,8 @@ ui <- function() {
                   collapsible = TRUE,
 
                   dateRangeInput("time_interval",
+                                 start = '2014-01-01',
+                                 end = '2014-02-01',
                                  label="Time Interval",
                                  language = "en-GB"),
 

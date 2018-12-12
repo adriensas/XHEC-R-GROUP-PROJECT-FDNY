@@ -13,6 +13,15 @@ plot_leaflet_map <- function(map_data_df, input) {
 
     map_density_lf <- tmap_leaflet(map_density)
 
+    #if(length(input$fireboxSelect) > 0) {
+    #  map_density_lf <- map_density_lf %>%
+    #    addMarkers(
+    #      nyc_map_firebox_full %>%
+    #        filter(Name %in% input$fireboxSelect) %>%
+    #        pull(geometry)
+    #    )
+    #}
+
     return(map_density_lf)
     #if(length(input$fireboxSelect)>0) {
   #
