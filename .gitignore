@@ -6,3 +6,4 @@
 .DS_Store
 data/*
 data-raw/*
+map_exploration.R
