@@ -26,9 +26,7 @@ shinyUI(fluidPage(
         menuItem(
           "App",
           tabName = "app",
-          icon = icon("fire-extinguisher"),
-          menuSubItem("data1", tabName = "app_tab1", icon = icon("bar-chart")),
-          menuSubItem("data2", tabName = "app_tab2", icon = icon("bar-chart"))
+          icon = icon("fire-extinguisher")
         ),
         menuItem(
           "Authors",
@@ -41,59 +39,90 @@ shinyUI(fluidPage(
       tabItems(
         tabItem(
           
-          tabName = "app_tab1",
-          h2("NY Firemen data visualisation"),
+          tabName = "app",
           fluidRow(
             
-            box(
-              title = "Filters",
+            column(
               width = 3,
-              collapsible = TRUE,
-              dateRangeInput("time_interval",
-                             label="Time Interval",
-                             language = "en-GB"),
-              selectInput("fireboxSelect",
-                          label = "FireBox",
-                          multiple = TRUE,
-                          choices = NULL),
               
-              selectInput("type",
-                          label = "Incident Type",
-                          multiple = TRUE,
-                          choices = NULL),
+              box(
+                title = "Incidents Filters",
+                status = "info",
+                width = NULL,
+                collapsible = TRUE,
+                
+                dateRangeInput("time_interval",
+                               label="Time Interval",
+                               language = "en-GB"),
+                
+                selectInput("district",
+                            label = "District",
+                            multiple = TRUE,
+                            choices = NULL),
+                
+                selectInput("fireboxSelect",
+                            label = "FireBox",
+                            multiple = TRUE,
+                            choices = NULL),
+                
+                selectInput("type",
+                            label = "Incident Type",
+                            multiple = TRUE,
+                            choices = NULL),
+                
+                selectInput("zip_code",
+                            label = "Incident Zip Code",
+                            multiple = TRUE,
+                            choices = NULL),
+                
+                selectInput("magnitude",
+                            label = "Incident Magnitude",
+                            multiple = TRUE,
+                            choices = NULL)
+              ),
               
-              selectInput("zip_code",
-                          label = "Incident Zip Code",
-                          multiple = TRUE,
-                          choices = NULL),
+              box(
+                title = "Map Filters",
+                status = "info",
+                width = NULL,
+                collapsible = TRUE,
+                
+                checkboxInput("heatbox",
+                              label = "heatbox1",
+                              value = FALSE)
+                
+              )
               
-              selectInput("magnitude",
-                          label = "Incident Magnitude",
-                          multiple = TRUE,
-                          choices = NULL)
+              
             ),
             
-            tabBox(
-              title = "Data to plot",
-              width = 9,
-              tabPanel("Plot1",
-                       
-                       dataTableOutput("plot1")
-                       
-                       ),
+            #column(
               
-              tabPanel("Plot2",
-                       
-                       dataTableOutput("plot2")
-                       
-                       ),
-              
-              tabPanel("Plot3",
-                       
-                       dataTableOutput("plot3")
-                       
-                       )
+              tabBox(
+                width = 9,
+                title = "NY Firemen data visualisation",
+                tabPanel("Maps", icon = icon("globe"),
+                         
+                         leafletOutput("fire_map")
+                         
+                ),
+                
+                tabPanel("Statistics", icon = icon("bar-chart"),
+                         
+                         dataTableOutput("plot3")
+                         
+                ),
+                
+                tabPanel("Data", icon = icon("book"),
+                         
+                         dataTableOutput("plot1")
+                         
+                )
+            
+            
             )
+            
+            #)
           )
         )
       )

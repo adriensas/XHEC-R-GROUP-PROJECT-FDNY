@@ -138,6 +138,15 @@ shinyServer(function(input, output, session) {
   
   #Set the choices for the user
   updateSelectInput(session = session,
+                    inputId = "district",
+                    choices = tidy_incidents %>% 
+                      dplyr::select(borough) %>% 
+                      distinct(borough) %>% 
+                      arrange(borough)
+  )   
+  
+  
+  updateSelectInput(session = session,
                     inputId = "fireboxSelect",
                     choices = tidy_incidents %>% 
                       dplyr::select(fire_box) %>% 
@@ -189,6 +198,10 @@ shinyServer(function(input, output, session) {
   
   #### MAP HENRI #################################################################################################################
   
+  #install.packages("sf")
+  #install.packages("raster")
+  #install.packages("rgdal")
+  #install.packages("tmap")
   library("sf")
   library("raster")
   library("tidyverse")
@@ -205,12 +218,14 @@ shinyServer(function(input, output, session) {
                           layer = "Fire_Boxes.csv",
                           quiet = TRUE)
   
+  
   plot_firebox <- function(x){
     if (str_sub(x,1,1) %in% c("B", "M", "Q", "R", "X") && str_length(x) == 5){
-      tm_shape(nyfc_firebox %>% filter(Name %in% x)) +
-        tm_bubbles() +
-        tm_shape(nyfc) +
-        tm_borders()
+      nyfc_firebox %>% 
+        filter(Name %in% x) %>%
+        leaflet() %>%
+        addProviderTiles("CartoDB") %>%
+        addMarkers()
     }
     else {
       "Please enter a correct firebox number."
@@ -221,7 +236,15 @@ shinyServer(function(input, output, session) {
     plot_firebox(input$fireboxSelect)
   })
 
-  
+  observeEvent(input$district, {
+    output$fire_map <- renderLeaflet({
+      plot_firebox(tidy_incidents %>%
+                                      filter(borough %in% input$district) %>%
+                                      dplyr::select(fire_box) %>%
+                                      distinct(fire_box) %>%
+                                      pull())
+  })
+    })
   
   
   
