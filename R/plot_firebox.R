@@ -7,7 +7,7 @@ library("sf")
 library("raster")
 library("tidyverse")
 library("rgdal")
-library("xml2")
+library("fireboxesml2")
 library("stringr")
 library("tmap")
 library("leaflet")
@@ -16,19 +16,28 @@ nyfc <- st_read(dsn = "data/nyfc",
                 layer = "nyfc",
                 quiet = TRUE)
 
-nyfc_firebox <- read.csv("data/firebox.csv")
+nyfc_firebox <- read.csv("data/firebofireboxes.csv")
 
-plot_firebox <- function(x){
-  if (str_sub(x,1,1) %in% c("B", "M", "Q", "R", "X") && str_length(x) == 5){
+plot_firebox <- function(fireboxes){
+  if (str_sub(fireboxes,1,1) %in% c("B", "M", "Q", "R", "fireboxes") && str_length(fireboxes) == 5){
     nyfc_firebox %>% 
-      filter(Name %in% x) %>%
+      filter(Name %in% fireboxes) %>%
       leaflet() %>%
-      addProviderTiles("CartoDB") %>%
+      addProviderTiles("CartoDB", group = "CartoDB") %>%
+      addProviderTiles("Esri", group = "Esri") %>%
+      addLayersControl(baseGroups = c("CartoDB", "Esri")) %>% 
       addCircleMarkers(lng = ~lon, lat = ~lat, label = ~paste0("<b>", Name, "</b>", "<br/>", "num of interventions"), 
-        radius = 2, color = "red")
+        radius = 2, color = "red", clusterOptions = markerClusterOptions())
   }
   else {
     "Please enter a correct firebox number."
   }
 }
+#Number of intervention to be changed in : get_inteventions_per_bofireboxes(fireboxes)
+#Intervention duration time : get_intervention_duration(fireboxes)
+#get_deployment_time(fireboxes)
+#get_nb_units(fireboxes)
 
+addSearchFeatures(options =
+                    searchFeaturesOptions(zoom = 10)
+                  targetGroups = 'Public')
