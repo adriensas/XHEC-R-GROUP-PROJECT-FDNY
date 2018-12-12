@@ -31,12 +31,16 @@ filter_fdny <- function(df, input) {
     filtered_df <- filtered_df %>%
       filter(borough %in% input$district)
   }
-  if(length(input$time) > 0) {
+  if(length(input$time_period) > 0) {
     filtered_df <- filtered_df %>%
       filter(as.numeric(format(as.POSIXct(filtered_df$inc_time, format="%Y-%m-%d %H:%M:%S"),
-                               format="%H")) >= input$time[1],
+                               format="%H")) >= input$time_period[1],
              as.numeric(format(as.POSIXct(filtered_df$inc_time, format="%Y-%m-%d %H:%M:%S"),
-                               format="%H")) <= input$time[2])
+                               format="%H")) <= input$time_period[2])
+  }
+  if(length(input$fireboxSelect) > 0) {
+    filtered_df <- filtered_df %>%
+      filter(fire_box %in% input$fireboxSelect)
   }
 
   return(filtered_df)

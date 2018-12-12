@@ -4,10 +4,10 @@ plot_leaflet_map <- function(map_data_df, input) {
     density_map_table <- nyfc_zip %>%
       dplyr::select(ZIPCODE, geometry) %>%
       left_join(map_data_df, by=c("ZIPCODE" = "zip_code")) %>%
-      dplyr::select(n, geometry)
+      dplyr::select(n, geometry, mean_interv_time, mean_nb_units)
 
     map_density <- tm_shape(density_map_table) +
-      tm_fill(col = input$map_info, alpha = 0.5, convert2density=TRUE) +
+      tm_fill(col = input$map_info, alpha = 0.5) +
       tm_shape(density_map_table) +
       tm_borders()
 

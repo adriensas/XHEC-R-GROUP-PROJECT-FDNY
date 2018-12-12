@@ -73,7 +73,13 @@ ui <- function() {
                   selectInput("magnitude",
                               label = "Incident Magnitude",
                               multiple = TRUE,
-                              choices = NULL)
+                              choices = NULL),
+
+                  sliderInput("time_period",
+                              label = "Period of the day",
+                              min = 0,
+                              max = 24,
+                              value = c(0, 24))
                 ),
 
                 box(
