@@ -28,8 +28,7 @@ plot_firebox <- function(fireboxes){
       addProviderTiles("CartoDB", group = "CartoDB") %>%
       addProviderTiles("Esri", group = "Esri") %>%
       addLayersControl(baseGroups = c("CartoDB", "Esri")) %>% 
-      addCircleMarkers(lng = ~lon, lat = ~lat, label = ~paste0("<b>", htmlEscape(Name), "</b>", "<br/>", "num of interventions"), 
-        radius = 2, color = "red", clusterOptions = markerClusterOptions())
+      addCircleMarkers(lng = ~lon, lat = ~lat, label = ~paste0("<b>", htmlEscape(Name), "</b>", "<br/>", "num of interventions"),  radius = 2, color = "red", clusterOptions = markerClusterOptions())
   }
   else {
     "Please enter a correct firebox number."
