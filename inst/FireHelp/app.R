@@ -14,4 +14,4 @@
 #library("tmap")
 #library(MAP535RFDNY)
 
-shinyApp(ui = ui, server = shinyServer(server))
+shinyApp(ui = ui, server = server)
