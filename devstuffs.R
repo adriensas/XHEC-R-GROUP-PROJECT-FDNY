@@ -27,3 +27,5 @@ nyfc_zip <- st_read(dsn = "data/ZIP_CODE_040114",
                     layer = "ZIP_CODE_040114",
                     quiet = TRUE)
 devtools::use_data(nyfc_zip, nyfc_zip)
+
+library(rhub)
