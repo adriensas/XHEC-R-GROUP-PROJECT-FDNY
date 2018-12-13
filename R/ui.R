@@ -95,7 +95,7 @@ ui <- function() {
                               selectize = TRUE,
                               label = "Information to display",
                               multiple = FALSE,
-                              choices = c('n', 'mean_interv_time', 'mean_nb_units'))
+                              choices = c('n', 'mean_interv_time', 'mean_nb_units', 'fire_box'))
 
                 )
 
