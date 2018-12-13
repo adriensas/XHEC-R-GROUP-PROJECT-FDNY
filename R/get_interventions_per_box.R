@@ -16,7 +16,7 @@ get_inteventions_per_box <- function(df) {
   interventions_per_box <- df %>%
     group_by(fire_box) %>%
     summarise(col = n()/nb_days) %>%
-   dplyr::select(col)
+    select(col)
 
   return(interventions_per_box)
 }

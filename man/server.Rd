@@ -11,7 +11,7 @@ server(input, output, session)
 
 \item{output}{output for ui shiny}
 
-\item{session}{}
+\item{session}{session}
 }
 \value{
 shiny app server

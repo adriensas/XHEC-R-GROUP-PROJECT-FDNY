@@ -2,7 +2,7 @@
 #'
 #' @param input input from ui shiny
 #' @param output output for ui shiny
-#' @param session
+#' @param session session
 #'
 #' @import dplyr shiny
 #'
@@ -15,7 +15,7 @@ server <- function(input, output, session) {
     updateSelectInput(session = session,
                       inputId = "fireboxSelect",
                       choices = tidy_incidents %>%
-                        dplyr::select(fire_box) %>%
+                        select(fire_box) %>%
                         distinct(fire_box) %>%
                         arrange(fire_box)
     )
@@ -23,7 +23,7 @@ server <- function(input, output, session) {
     updateSelectInput(session = session,
                       inputId = "type",
                       choices = tidy_incidents %>%
-                        dplyr::select(inc_type) %>%
+                        select(inc_type) %>%
                         distinct(inc_type) %>%
                         arrange(inc_type)
     )
@@ -31,7 +31,7 @@ server <- function(input, output, session) {
     updateSelectInput(session = session,
                       inputId = "zip_code",
                       choices = tidy_incidents %>%
-                        dplyr::select(zip_code) %>%
+                        select(zip_code) %>%
                         distinct(zip_code) %>%
                         arrange(zip_code)
     )
@@ -39,7 +39,7 @@ server <- function(input, output, session) {
     updateSelectInput(session = session,
                       inputId = "magnitude",
                       choices = tidy_incidents %>%
-                        dplyr::select(inc_level) %>%
+                        select(inc_level) %>%
                         distinct(inc_level) %>%
                         arrange(inc_level)
     )
@@ -47,7 +47,7 @@ server <- function(input, output, session) {
     updateSelectInput(session = session,
                       inputId = "district",
                       choices = tidy_incidents %>%
-                        dplyr::select(borough) %>%
+                        select(borough) %>%
                         distinct(borough) %>%
                         arrange(borough)
     )

@@ -18,12 +18,12 @@ plot_leaflet_map <- function(map_data_df, input) {
       fct_lvl <- sort(union(levels(nyfc_zip$ZIPCODE), levels(map_data_df$heatmap$zip_code)))
       density_map_table <- nyfc_zip %>%
         mutate(ZIPCODE = factor(ZIPCODE, levels = fct_lvl)) %>%
-        dplyr::select(ZIPCODE, geometry) %>%
+        select(ZIPCODE, geometry) %>%
         left_join(
           map_data_df$heatmap %>% mutate(zip_code = factor(zip_code, levels = fct_lvl)),
           by=c("ZIPCODE" = "zip_code")
         ) %>%
-        dplyr::select(n, geometry, mean_interv_time, mean_nb_units)
+        select(n, geometry, mean_interv_time, mean_nb_units)
 
       map_density <- tm_shape(density_map_table) +
         tm_fill(col = input$map_info, alpha = 0.5) +

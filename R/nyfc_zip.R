@@ -1,0 +1,20 @@
+#' Data frame containing the New York zip code informations
+#'
+#' @format A data frame with 263 rows and 13 variables:
+#' \describe{
+#'   \item{ZIPCODE}{zip code name as a factor}
+#'   \item{BLDGZIP}{BLDGZIP}
+#'   \item{PO_NAME}{PO_NAME}
+#'   \item{POPULATION}{POPULATION}
+#'   \item{AREA}{AREA}
+#'   \item{STATE}{STATE}
+#'   \item{COUNTY}{COUNTY}
+#'   \item{ST_FIPS}{ST_FIPS}
+#'   \item{CTY_FIPS}{CTY_FIPS}
+#'   \item{URL}{URL}
+#'   \item{SHAPE_AREA}{SHAPE_AREA}
+#'   \item{SHAPE_LEN}{SHAPE_LEN}
+#'   \item{geometry}{shape and position as sfc_POLYGON}
+#' }
+#' @source \url{https://opendata.cityofnewyork.us/}
+"nyfc_zip"

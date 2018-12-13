@@ -14,7 +14,7 @@ get_deployment_time <- function(df) {
   #compute column for deployment time
   deployment_time <- df %>%
     mutate(col = as.numeric(arr_time) - as.numeric(inc_time)) %>%
-   dplyr::select(col)
+   select(col)
 
  return(deployment_time)
 
