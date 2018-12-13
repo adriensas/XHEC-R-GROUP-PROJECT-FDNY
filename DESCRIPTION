@@ -1,12 +1,29 @@
 Package: MAP535RFDNY
 Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
+Version: 0.9.0.9000
 Authors@R: c(
-  person("Adrien", "Sasportes", email =
-                      "adrien.sasportes@polytechnique.edu", role = c("aut", "cre"))
-)
+    person("Adrien", "Sasportes", email = "adrien.sas@gmail.com", role = c("aut", "cre")),
+    person("Pierre", "Monnot", email = "pierre.monnot@polytechnique.edu", role = c("aut")),
+    person("Quentin", "Sellem", email = "quentin.sellem@polytechnique.edu", role = c("aut")),
+    person("Henri", "Matalon", email = "henri.matalon@polytechnique.edu", role = c("aut")),
+    person("Benjamin", "Mai", email = "benjamin.mai@polytechnique.edu", role = c("aut"))
+  )
 Description: What the package does (one paragraph).
-Depends: R (>= 3.5.1)
-License: What license is it under?
+Depends: R (>= 3.5)
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
+Imports:
+  dplyr,
+  shinydashboard,
+  leaflet,
+  tidyverse,
+  sf,
+  rgdal,
+  tmap,
+  shiny,
+  lubridate,
+  purrr
+Suggests: 
+    testthat
+RoxygenNote: 6.1.1
