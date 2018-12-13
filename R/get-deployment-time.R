@@ -1,12 +1,11 @@
-#' Give the statistic dataframe
+#' Extract the deployment time from a data frame with the same columns as tidy_incidents data.
 #'
-#' @param df main data frame
-#' @param input shiny /list/ inputs
+#' @param df data frame from which we want to extract the deployment time
 #'
-#' @return data frame filtered and data frame with corresponding statistics
+#' @return data frame with a column named `col` containing all the deployment time.
 #' @import dplyr
 #' @export
-#' @rdname statistic-fdny
+#' @rdname get_deployment_time
 #'
 
 #take a data frame as input and return a 1 column data frame of the deployment time for each intervention

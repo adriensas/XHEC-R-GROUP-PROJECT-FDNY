@@ -1,3 +1,12 @@
+#' Compute the 2 data frame needed to plot the maps from the filtered one.
+#'
+#' @param filtered_df a filtered version of the full data
+#'
+#' @import dplyr
+#'
+#' @return A list of dataframe `heatmap` containing n, mean_interv_time, mean_nb_units per zip code. A list of dataframe `fire_box` containing n, mean_interv_time, mean_nb_units per fire box.
+#' @export
+#' @rdname compute_map_df
 
 compute_map_df <- function(filtered_df) {
   if(dim(filtered_df)[1]>1) {

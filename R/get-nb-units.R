@@ -1,13 +1,11 @@
-#' Give the statistic dataframe
+#' Extract the number of units from a data frame with the same columns as tidy_incidents data.
 #'
-#' @param df main data frame
-#' @param input shiny /list/ inputs
+#' @param df data frame from which we want to extract the number of units
 #'
-#' @return data frame filtered and data frame with corresponding statistics
-#'
+#' @return data frame with a column named `col` containing all the number of units.
 #' @import dplyr
 #' @export
-#' @rdname statistic-fdny
+#' @rdname get_nb_units
 #'
 
 get_nb_units <- function(df){

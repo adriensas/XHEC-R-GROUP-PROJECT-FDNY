@@ -1,4 +1,12 @@
-#library("htmltools")
+#' Plot the map containing the infos of each fire box.
+#'
+#' @param fireboxes_df a df containing  n | mean_interv_time | mean_nb_units for each fire_box
+#'
+#' @import dplyr leaflet
+#'
+#' @return Plot of the fire box with corresponding data
+#' @export
+#' @rdname plot_firebox
 
 plot_firebox <- function(fireboxes_df){
   nyc_map_firebox_full_filtered <- nyc_map_firebox_full
@@ -43,8 +51,3 @@ plot_firebox <- function(fireboxes_df){
     return("No statistics to display.")
   }
 }
-#radius = 2+5*(n-min_n)/max_n,
-#Number of intervention to be changed in : get_inteventions_per_bofireboxes(fireboxes)
-#Intervention duration time : get_intervention_duration(fireboxes)
-#get_deployment_time(fireboxes)
-#get_nb_units(fireboxes)

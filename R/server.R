@@ -1,11 +1,14 @@
-#
-# This is the server logic of a Shiny web application. You can run the
-# application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+#' The Shiny app server
+#'
+#' @param input input from ui shiny
+#' @param output output for ui shiny
+#' @param session
+#'
+#' @import dplyr shiny
+#'
+#' @return shiny app server
+#' @export
+#' @rdname server
 
 server <- function(input, output, session) {
     #Set the choices for the user

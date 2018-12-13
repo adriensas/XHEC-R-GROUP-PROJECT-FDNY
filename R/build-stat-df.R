@@ -1,10 +1,10 @@
 #' Take a vector as input and return a tibble with the min, mean, median and max of this vector
 #'
-#' @param x
+#' @param x dataframe with a column `col` containing all the values
 #'
-#' @return data frame min | mean | var | max
+#' @return A data frame containing min | mean | var | max
 #' @export
-#' @rdname build-stat-df
+#' @rdname build_stat_df
 #'
 
 build_stat_df <- function(x){

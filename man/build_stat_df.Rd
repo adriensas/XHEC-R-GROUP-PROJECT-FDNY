@@ -7,10 +7,10 @@
 build_stat_df(x)
 }
 \arguments{
-\item{x}{}
+\item{x}{dataframe with a column `col` containing all the values}
 }
 \value{
-data frame min | mean | var | max
+A data frame containing min | mean | var | max
 }
 \description{
 Take a vector as input and return a tibble with the min, mean, median and max of this vector

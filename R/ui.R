@@ -1,11 +1,11 @@
-#
-# This is the user-interface definition of a Shiny web application. You can
-# run the application by clicking 'Run App' above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
+#' The Shiny app server
+#'
+#' @import shiny shinydashboard
+#'
+#' @return shiny app server
+#' @export
+#' @rdname ui
+
 ui <- function() {
   shinyUI(fluidPage(
 

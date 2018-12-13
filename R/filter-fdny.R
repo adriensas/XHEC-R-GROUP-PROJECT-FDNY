@@ -1,13 +1,13 @@
-#' Apply the filter to the main data frame
+#' Filter the data frame containing all the data using the inputs from the shiny app.
 #'
-#' @param df main data frame
-#' @param input shiny /list/ inputs
+#' @param df data frame containing all the data
+#' @param input input from the shiny app
 #'
-#' @return subset of the param data frame filtered following the input
 #' @import dplyr
-#' @export
-#' @rdname filter-fdny
 #'
+#' @return A filtered version of the full data frame. A subset of the full dataframe.
+#' @export
+#' @rdname filter_fdny
 
 filter_fdny <- function(df, input) {
   if(length(input$time_interval) == 0) {

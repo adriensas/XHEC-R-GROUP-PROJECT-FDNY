@@ -1,13 +1,11 @@
-#' Give the statistic dataframe
+#' Extract the interventions per box from a data frame with the same columns as tidy_incidents data.
 #'
-#' @param df main data frame
-#' @param input shiny /list/ inputs
+#' @param df data frame from which we want to extract the interventions per box
 #'
-#' @return data frame filtered and data frame with corresponding statistics
-#'
+#' @return data frame with a column named `col` containing all the interventions per box.
 #' @import dplyr
 #' @export
-#' @rdname statistic-fdny
+#' @rdname get_inteventions_per_box
 #'
 
 get_inteventions_per_box <- function(df) {
