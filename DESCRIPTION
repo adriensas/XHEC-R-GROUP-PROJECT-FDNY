@@ -16,6 +16,8 @@ Import:
   rgdal
   tmap
   shiny
+  lubridate
+  purrr
 Suggests: 
     testthat
 RoxygenNote: 6.1.1

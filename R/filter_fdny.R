@@ -16,7 +16,7 @@ filter_fdny <- function(df, input) {
   filtered_df <- df
   if(input$time_interval[2]-input$time_interval[1] > 0) {
     filtered_df <- filtered_df %>%
-      filter(inc_time >= input$time_interval[1], inc_time <= input$time_interval[2])
+      filter(as.POSIXct(inc_time) >= as.POSIXct(input$time_interval[1]), as.POSIXct(inc_time) <= as.POSIXct(input$time_interval[2]))
   }
   if(length(input$zip_code) > 0) {
     filtered_df <- filtered_df %>%
