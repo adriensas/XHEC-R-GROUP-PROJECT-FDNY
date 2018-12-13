@@ -7,7 +7,7 @@
 #' @import dplyr
 #'
 #' @export
-#' @rdname statistic-fdny
+#' @rdname statistic_fdny
 #'
 
 statistic_fdny <- function(df, input){
