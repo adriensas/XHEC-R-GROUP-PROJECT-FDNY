@@ -14,6 +14,8 @@ usethis::use_test("get_inteventions_per_box")
 usethis::use_test("get_nb_units")
 usethis::use_test("statistic_fdny")
 
+usethis::use_vignette('test')
+
 devtools::check()
 
 devtools::load_all()
