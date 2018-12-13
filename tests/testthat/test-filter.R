@@ -2,8 +2,6 @@ context("test-filter")
 
 library(dplyr)
 
-load("../../data/incidents.RData")
-
 data.test <- tidy_incidents
 
 input <- list()

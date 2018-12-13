@@ -7,5 +7,14 @@ Depends: R (>= 3.5.1)
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+Import:
+  dplyr
+  shinydashboard
+  leaflet
+  tidyverse
+  sf
+  rgdal
+  tmap
+  shiny
 Suggests: 
     testthat

@@ -7,7 +7,11 @@ plot_firebox <- function(fireboxes_df){
     nyc_map_firebox_full_filtered <- nyc_map_firebox_full %>%
       filter(Name %in% fireboxes)
 
+    fct_lvl <- sort(union(levels(nyc_map_firebox_full_filtered$Name), levels(fireboxes_df$fire_box)))
+    fireboxes_df <- fireboxes_df %>% mutate(fire_box = factor(fire_box, fct_lvl))
+
     nyc_map_firebox_full_filtered <- nyc_map_firebox_full_filtered %>%
+      mutate(Name = factor(Name, fct_lvl)) %>%
       left_join(fireboxes_df, by = c("Name"="fire_box"))
 
     max_n <- max(fireboxes_df$n, na.rm = TRUE)

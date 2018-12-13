@@ -1,16 +1,12 @@
-#' Give the statistic dataframe
+#' Take a vector as input and return a tibble with the min, mean, median and max of this vector
 #'
-#' @param df main data frame
-#' @param input shiny /list/ inputs
+#' @param x
 #'
-#' @return data frame filtered and data frame with corresponding statistics
-#' @import dplyr
+#' @return data frame min | mean | var | max
 #' @export
-#' @rdname statistic-fdny
+#' @rdname build-stat-df
 #'
 
-
-#take a vector as input and return a tibble with the min, mean, median and max of this vector
 build_stat_df <- function(x){
 
   max_no_na <- partial(max, na.rm = TRUE)
