@@ -1,17 +1,3 @@
-#library(shiny)
-#
-#library("htmltools")
-#library(shinydashboard)
-#library(leaflet)
-#library(tidyverse)
-#library("sf")
-#library(dplyr)
-##library("raster")
-#library("tidyverse")
-#library(rgdal)
-#library("xml2")
-#library("stringr")
-#library("tmap")
-#library(MAP535RFDNY)
+library(MAP535RFDNY)
 
 shinyApp(ui = ui, server = server)
