@@ -14,7 +14,9 @@ usethis::use_test("get_inteventions_per_box")
 usethis::use_test("get_nb_units")
 usethis::use_test("statistic_fdny")
 
+#Create the vignettes
 usethis::use_vignette('test')
+usethis::use_vignette('Firebox_data')
 
 devtools::check()
 
