@@ -30,7 +30,9 @@ plot_leaflet_map <- function(map_data_df, input) {
         tm_shape(density_map_table) +
         tm_borders()
 
-      map_density_lf <- tmap_leaflet(map_density)
+      map_density_lf <- tmap_leaflet(map_density) %>% 
+        addProviderTiles("CartoDB", group = "CartoDB") %>%
+        addLayersControl(baseGroups = c("CartoDB", "Esri"))
       return(map_density_lf)
     }
     else {
