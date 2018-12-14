@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r}
+```{r eval = FALSE}
 library(readr)
 library(dplyr)
 library(stringr)
