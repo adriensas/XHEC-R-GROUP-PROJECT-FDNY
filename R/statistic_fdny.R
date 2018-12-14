@@ -34,12 +34,15 @@ statistic_fdny <- function(df, input){
 
   #extract col from each element of the list
   elements2 <- map(elements1, "col") %>%
-    set_names(c("dep_time", "interv_per_box", "nb_units", "interv_duration"))
+    set_names(c("Intervention Duration", "Nb of intervention per box per day", "Nb of Units Deployed", "Duration of the Intervention"))
 
 
   stat_df <- map_dfr(elements2, build_stat_df, .id = "statistic")
 
-  n_per_type <- filtered_df %>% group_by(inc_type) %>% summarize(n = n())
+  n_per_type <- filtered_df %>%
+    group_by(inc_type) %>%
+    summarize(n = n()) %>%
+    rename("Number of interventions"="n", "Type of incidents"="inc_type")
 
   output <- list()
   output$filtered_df <- filtered_df

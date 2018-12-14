@@ -11,7 +11,7 @@
 
 plot_leaflet_map <- function(map_data_df, input) {
   if (length(map_data_df)>0) {
-    if (input$map_info=='fire_box') {
+    if (input$map_info=='Fire Box Map') {
       return(plot_firebox(map_data_df$fire_box))
     }
     if (length(map_data_df$heatmap)>1) {
@@ -23,7 +23,7 @@ plot_leaflet_map <- function(map_data_df, input) {
           map_data_df$heatmap %>% mutate(zip_code = factor(zip_code, levels = fct_lvl)),
           by=c("ZIPCODE" = "zip_code")
         ) %>%
-        select(n, geometry, mean_interv_time, mean_nb_units)
+        select(`Number of Intervention`, geometry, `Mean Intervention Duration`, `Mean Number of Units`)
 
       map_density <- tm_shape(density_map_table) +
         tm_fill(col = input$map_info, alpha = 0.5) +

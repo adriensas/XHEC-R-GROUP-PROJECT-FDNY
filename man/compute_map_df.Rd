@@ -10,7 +10,7 @@ compute_map_df(filtered_df)
 \item{filtered_df}{a filtered version of the full data}
 }
 \value{
-A list of dataframe `heatmap` containing n, mean_interv_time, mean_nb_units per zip code. A list of dataframe `fire_box` containing n, mean_interv_time, mean_nb_units per fire box.
+A list of dataframe `heatmap` containing "Number of Intervention", "Mean Intervention Duration", "Mean Number of Units" per zip code. A list of dataframe `fire_box` containing "Number of Intervention", "Mean Intervention Duration", "Mean Number of Units" per fire box.
 }
 \description{
 Compute the 2 data frame needed to plot the maps from the filtered one.

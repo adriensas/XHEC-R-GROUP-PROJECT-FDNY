@@ -14,14 +14,13 @@ usethis::use_test("get_inteventions_per_box")
 usethis::use_test("get_nb_units")
 usethis::use_test("statistic_fdny")
 
-usethis::use_vignette('test')
+usethis::use_vignette('cr_reunion_laures_20181123')
+usethis::use_vignette('tidy_firebox_data')
+usethis::use_vignette('tidy_incidents')
 
 devtools::check()
 
 devtools::load_all()
-
-load("../data/incidents.RData")
-devtools::use_data(tidy_incidents, tidy_incidents)
 
 nyfc_zip <- st_read(dsn = "data/ZIP_CODE_040114",
                     layer = "ZIP_CODE_040114",
