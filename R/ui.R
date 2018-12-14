@@ -22,11 +22,6 @@ ui <- function() {
             "App",
             tabName = "app",
             icon = icon("fire-extinguisher")
-          ),
-          menuItem(
-            "Authors",
-            tabName = "authors",
-            icon = icon("users")
           )
         )
       ),
@@ -129,6 +124,19 @@ ui <- function() {
 
               #)
             )
+          ),
+          tabItem(
+            tabName = "project",
+            h1("FireHelp"),
+            h2("Origin of the Project"),
+            p("The firemen of the BSPP (Paris Fire Department) perform over 500,000 interventions each year. Each and every one of them generates an incident report, which contain much information about the date, time, victim, response..."),
+            p("According to CDT Mathieu, a superior officer from BSPP, their is a real need for advanced analytical tools. In order to report on the interventions, increase the efficiency of a fire company or ask for additional means, statistics have to be computed and presented to the relevant authorities. Today, those calculations are done manually"),
+            p("FireHelp provides a comprehensive tool for data analysis of the interventions of a fire department, by harnessing various capabilities of the R programming language like interactive maps or reactive programming."),
+            p("In its current version, FireHelp analyzes the data provided by the New-York City Fire Department (NYFD). However, military officers from the BSPP have already expressed their interest in the project and will give us access to their data to make FireHelp available in Paris."),
+            h2("The Application"),
+            p("FireHelp comes in the form of a package containing a Shiny App. It allows the user to perform various analyses of the interventions of the FDNY, and to rapidly visualize the results."),
+            p("Through a variety of filters, the user can select the relevant interventions and areas of interest among the application's dataset (which contains all the interventions of the FDNY between January 1st, 2013 to January 1st, 2018). Once the user has defined the appropriate scope for its study, the application computes relevant summary statistics, which are then made available to the user in two main formats. First, the application allows the user to access a table containing the statistics calculated by the app. Second, the user has access to an interactive map of the city, on which he can plot those statistics."),
+            p("Through its interactive and user-friendly interface, this application can simplify largely the work of superior officers of the Fire Department of a given city, allowing them to perform hours of manual data analyses in a matter of minutes, without having to learn anything about programming languages such as R.")
           )
         )
       )
