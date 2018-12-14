@@ -4,7 +4,7 @@
 #'
 #' @import dplyr
 #'
-#' @return A list of dataframe `heatmap` containing n, mean_interv_time, mean_nb_units per zip code. A list of dataframe `fire_box` containing n, mean_interv_time, mean_nb_units per fire box.
+#' @return A list of dataframe `heatmap` containing "Number of Intervention", "Mean Intervention Duration", "Mean Number of Units" per zip code. A list of dataframe `fire_box` containing "Number of Intervention", "Mean Intervention Duration", "Mean Number of Units" per fire box.
 #' @export
 #' @rdname compute_map_df
 
@@ -25,6 +25,8 @@ compute_map_df <- function(filtered_df) {
         mean_interv_time = as.integer(mean(as.numeric(dep_time) - as.numeric(arr_time), na.rm = TRUE)),
         mean_nb_units = as.integer(mean(units, na.rm = TRUE))
       )
+    names(output$fire_box) <- c("fire_box", "Number of Intervention", "Mean Intervention Duration", "Mean Number of Units")
+    names(output$heatmap) <- c("zip_code", "Number of Intervention", "Mean Intervention Duration", "Mean Number of Units")
     return(output)
   } else {
     return(data.frame())

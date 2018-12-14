@@ -22,19 +22,19 @@ plot_firebox <- function(fireboxes_df){
       mutate(Name = factor(Name, fct_lvl)) %>%
       left_join(fireboxes_df, by = c("Name"="fire_box"))
 
-    max_n <- max(fireboxes_df$n, na.rm = TRUE)
-    min_n <- min(fireboxes_df$n, na.rm = TRUE)
+    max_n <- max(fireboxes_df$`Number of Intervention`, na.rm = TRUE)
+    min_n <- min(fireboxes_df$`Number of Intervention`, na.rm = TRUE)
 
-    max_interv_time <- max(fireboxes_df$mean_interv_time, na.rm = TRUE)
-    min_interv_time <- min(fireboxes_df$mean_interv_time, na.rm = TRUE)
+    max_interv_time <- max(fireboxes_df$`Mean Intervention Duration`, na.rm = TRUE)
+    min_interv_time <- min(fireboxes_df$`Mean Intervention Duration`, na.rm = TRUE)
 
-    pal <- colorQuantile("Reds", nyc_map_firebox_full_filtered$mean_interv_time, n = 7)
+    pal <- colorQuantile("Reds", nyc_map_firebox_full_filtered$`Mean Intervention Duration`, n = 7)
 
     nyc_map_firebox_full_filtered %>%
       mutate(
         lon = st_coordinates(geometry)[,1],
         lat = st_coordinates(geometry)[,2],
-        size = 2+70*(n-min_n)/max_n
+        size = 2+70*(`Number of Intervention`-min_n)/max_n
       ) %>%
       leaflet() %>%
       addProviderTiles("CartoDB", group = "CartoDB") %>%
@@ -42,9 +42,9 @@ plot_firebox <- function(fireboxes_df){
       addCircleMarkers(
         opacity = 1,
         lng = ~lon, lat = ~lat,
-        popup = ~paste0("<b>",Name,"</b>", "<br/>Int.Dur : ", mean_interv_time, "<br/>Nb units : ", mean_nb_units, "<br/>Number : ", n),
+        popup = ~paste0("<b>",Name,"</b>", "<br/>Int.Dur : ", `Mean Intervention Duration`, "<br/>Nb units : ", `Mean Number of Units`, "<br/>Number : ", `Number of Intervention`),
         radius = ~size,
-        color = ~pal(mean_interv_time),
+        color = ~pal(`Mean Intervention Duration`),
         clusterOptions = markerClusterOptions()
       )
   } else {

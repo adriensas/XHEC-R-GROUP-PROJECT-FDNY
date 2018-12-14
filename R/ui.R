@@ -95,7 +95,7 @@ ui <- function() {
                               selectize = TRUE,
                               label = "Information to display",
                               multiple = FALSE,
-                              choices = c('n', 'mean_interv_time', 'mean_nb_units', 'fire_box'))
+                              choices = c("Number of Intervention", "Mean Intervention Duration", "Mean Number of Units", "Fire Box Map"))
 
                 )
 
