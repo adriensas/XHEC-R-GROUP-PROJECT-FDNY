@@ -1,0 +1,100 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# Réunion avec le CNE Mathieu LAURES
+## Vendredi 23 Novembre 2018
+
+### Situation
+
+#### Présents
+
+**Date** : Vendredi 23 Novembre 2018.
+**Heure** : 12h30 - 13h45
+**Lieu** : Magnan.
+**Personnes présentes** : 
+- \(CNE) Mathieu LAURES ;
+- Benjamin MAI ;
+- Henri MATALON ;
+- Pierre MONNOT ;
+- Adrien SASPORTES.
+
+#### Avancement du projet
+
+L'exploration des données étant presque terminée, il devient important de cadrer précisément les attendus du projet. Les principaux points à préciser sont :
+- la population visée par le projet ;
+- les variables d'entrée d'intérêt ;
+- les différents éléments à fournir en sortie.
+
+L'exploration des données n'ayant pas mis en évidence des tendances particulièrement fortes, la piste des prédictions à l'aide de *Machine Learning* est écartée (au moins dans la première phase du projet). Le principal objectif est désormais de produire un outil permettant une exploitation et une visualisation rapide et facile des données disponibles par les pompiers.
+
+### Réunion
+
+#### Objectif
+
+Le but de cette réunion est d'obtenir le point de vue des pompiers sur le projet. Le CNE LAURES ayant été CDU à la BSPP, il est représentatif de la population visée par l'application. Il s'agit de récolter son retour d'expérience afin d'identifier les variables d'intérêt pour le projet.
+
+#### Contenu
+
+Les informations dont dispose la BSPP proviennt majoritairement des rapports d'intervention rédigés par les chefs d'agrès. Il y a environ 550 000 interventions par an à la BSPP, chacune donnant lieu à un rapport d'intervention. Ces rapports sont centralisés et contiennent (entre autres) les informations suivantes :
+- lieu de l'incident (adresse et étage) ;
+- moyens mis en oeuvre ;
+- date et heure :
+  - de déclaration de l'incident ;
+  - d'arrivée des premiers moyens;
+  - de départ des derniers moyens ;
+- la caserne sollicitée ;
+- les informations personnelles de la victime ;
+- le type d'incident (sous la forme d'un code).
+
+La BSPP dispose d'une unité de statistiques, mais ses effectifs sont restreints et les analyses qu'elle produit ne permettent pas d'agréger les données de plusieurs casernes. Leur exploitation par un CDU nécessite donc toujours une étape de calcul supplémentaire, qui peut rapidement se révéler très chronophage. Notre outil devra donc prendre ce détail en compte.
+
+Pour un CDU, les données pertinentes sont très variées, et comprennent notamment :
+- des statistiques concernant les incidents (type, magnitude, etc...) ;
+- des statistiques concernant les moyens mis en oeuvre (nombre, type, délai d'intervention, temps d'intervention, etc...) ;
+- des moyens de visualisation simples de ces données (tableaux, graphes, cartes, etc...).
+
+Un point important à prendre en compte est la facilité d'utilisation de l'outil. La BSPP dispose actuellement de moyens centralisés par le logiciel ADAGIO. Cependant, en raison de sa difficulté d'utilisation, ses capacités d'analyse statistique ne sont pas réellement exploitées par les forces. Un axe d'effort sera donc l'accessibilité de l'application et son exploitabilité par des personnels avec des niveaux de connaissance très hétérogènes.
+
+Une mise en relation avec le centre des opérations et un accès (au moins partiel) aux données de la BSPP parait réaliste à moyen terme.
+
+### Répercussions sur le projet
+
+#### Court terme
+
+La première échéance majeure du projet est le rendu d'une première version de l'application dans le cadre du projet de MAP536R. Compte-tenu des délais contraints, l'intégration des données de la BSPP ne semnle pas réaliste à ce stade. Le projet exploitera donc dans un premier temps les données du FDNY.
+
+Le principal objectif est la visualisation des données. Plusieurs axes majeurs doivent être traités :
+1. nettoyage et analyse du jeu de données actuel ;
+2. création de l'interface utilisateur ;
+3. \(si possible) collecte de données supplémentaires pour enrichir le data set initial (météo, événements majeurs, etc...).
+
+Un point d'effort particulier doit être la facilité d'utilisation de l'outil, tant du point de vue de la souplesse que de la rapidité. Dans les mots du LV Thomas SERE :
+
+> Soupleté & Agilesse.
+
+Cette première étape doit être vue comme une preuve de concept, qui pourra être présentée à la BSPP pour justifier la poursuite du projet et l'accès à ses données.
+
+#### Moyen terme
+
+A moyen terme, plusieurs objectifs sont identifiables. Le premier est l'intégration des données de la BSPP. Une visite du centre opérationnelle fin décembre 2018 ou début janvier 2019 est envisageable. 
+
+Le second objectif est l'enrichissement de l'analyse des données existante par des prédictions, à l'aide d'algortihmes de *Machine Learning* adaptés.
+
+#### Long terme
+
+A long terme, la création d'une fonctionnalité d'allocation des ressources en temps réel est envisageable. Elle permettrait, à l'aide de l'emplacement des différents moyens disponibles, de leur utilisation récente, et des prédictions effectuées, d'optimiser l'utilisation des différentes ressources de la BSPP. compte-tenu des problématiques actuelles liées aux contraintes RH importantes dans l'armée de Terre et de l'utilisation extrême de ses personnels, un tel algorithme présenterait un plus-value majeure pour la BSPP. Dans ce cadre, l'intégration de données de localisation des moyens et de traffic en temps réel est envisageable.
