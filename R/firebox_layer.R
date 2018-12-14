@@ -28,7 +28,7 @@ plot_firebox <- function(fireboxes_df){
       max_interv_time <- max(fireboxes_df$`Mean Intervention Duration`, na.rm = TRUE)
       min_interv_time <- min(fireboxes_df$`Mean Intervention Duration`, na.rm = TRUE)
 
-      pal <- colorNumeric(c("green", "red"), nyc_map_firebox_full_filtered$`Mean Intervention Duration`, n = 7)
+      pal <- colorNumeric(c("green", "red"), nyc_map_firebox_full_filtered$`Mean Intervention Duration`)
 
       nyc_map_firebox_full_filtered %>%
         mutate(

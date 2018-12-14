@@ -1,6 +1,6 @@
 Package: MAP535RFDNY
 Title: What the Package Does (one line, title case)
-Version: 0.9.0.9000
+Version: 1.0.0.9000
 Authors@R: c(
     person("Adrien", "Sasportes", email = "adrien.sas@gmail.com", role = c("aut", "cre")),
     person("Pierre", "Monnot", email = "pierre.monnot@polytechnique.edu", role = c("aut")),

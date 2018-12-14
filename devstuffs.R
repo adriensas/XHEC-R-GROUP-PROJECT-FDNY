@@ -17,6 +17,7 @@ usethis::use_test("statistic_fdny")
 usethis::use_vignette('cr_reunion_laures_20181123')
 usethis::use_vignette('tidy_firebox_data')
 usethis::use_vignette('tidy_incidents')
+usethis::use_vignette('MAP535RFDNY')
 
 devtools::check()
 

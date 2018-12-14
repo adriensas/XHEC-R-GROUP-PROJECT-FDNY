@@ -1,0 +1,99 @@
+---
+title: "MAP535RFDNY"
+author: "Adrien Sasportes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{MAP535RFDNY}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette is a brief explanation of this package.
+The project is an interface that allow firem men from New York to quickly access and visualize informations about the pas incidents in New York City.
+It takes the form of a Shiny app that can be run using the function `run_app()`.
+
+# The Shiny app Interface
+
+The Shiny app contains 3 'main' tabs :
+- Project 
+- App
+- Authors
+
+## Project
+
+A brief description of the project.
+
+## App
+
+The main app.
+
+### Filters
+
+Appears on the left hand side.
+
+#### Incidents filters
+
+Filters used to filter the data set to analyse.
+
+#### Maps filters
+
+Allow the user to choose the map to display
+
+### Informations section
+
+#### Map
+
+The map on which some infos are displayed.
+
+#### Statistics
+
+Some ineresting and useful statistic from the filtered data
+
+#### Full  filtered datas
+
+The complete list of the incidents (that follow the filter)
+
+## Authors
+
+Some nice information about the authors of this marvellous project.
+
+# How does it work ?
+
+## statistic_fdny
+
+It take as an input the full `tidy_incidents` df.
+This is the function that returns the two data frame to be displayed : 
+- Statistics
+- Full  filtered datas
+In order to do so it filters the data using the `input` from the Shiny ui using `filter_fdny`.
+Then it compute some statistic on this data frame using  : `get-[...]` functions, `build_stat_df`
+
+## plot_leaflet_map
+
+It plot the leaflet map of the project.
+Depending on wether the user choose to plot the firebox : 
+- If yes it plots the fire box map using `plot_firebox` function.
+- If no it choose is the correct column for which it should draw a zip-code dependent heatmap.
+
+### plot_firebox
+
+Plot the firebox as dot of different size and color :
+- The bigger the more incidents happened at this fire box relative to other (in the filtered data)
+- The more red (to oppose to green) the longer the incident duration was (in the filtered data)
+
+# Conclusion
+
+This shiny app is at the same time a usefule project that would worth to be worked on and improved even after the assignment ends, but also a really good project that allow us to put into application all the skills learned in the R course :
+- Dplyr data manipulation and combination
+- functionnal programming
+- unit testing
+- maps manipulations
+- building of a shiny app
