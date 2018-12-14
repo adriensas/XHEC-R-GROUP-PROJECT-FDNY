@@ -4,6 +4,5 @@
 .Ruserdata
 **/.DS_Store
 .DS_Store
-data/*
 data-raw/*
 map_exploration.R
