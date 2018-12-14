@@ -1,0 +1,1 @@
+globalVariables(c("ZIPCODE","arr_time","borough","dep_time","fire_box","geometry","inc_level","inc_time","inc_type","mean_interv_time","mean_nb_units","nyc_map_firebox_full","nyfc_zip","st_coordinates","tidy_incidents","var","zip_code","Name"))

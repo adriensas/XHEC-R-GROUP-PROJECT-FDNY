@@ -14,6 +14,8 @@ usethis::use_test("get_inteventions_per_box")
 usethis::use_test("get_nb_units")
 usethis::use_test("statistic_fdny")
 
+usethis::use_vignette('test')
+
 devtools::check()
 
 devtools::load_all()
@@ -25,3 +27,5 @@ nyfc_zip <- st_read(dsn = "data/ZIP_CODE_040114",
                     layer = "ZIP_CODE_040114",
                     quiet = TRUE)
 devtools::use_data(nyfc_zip, nyfc_zip)
+
+library(rhub)

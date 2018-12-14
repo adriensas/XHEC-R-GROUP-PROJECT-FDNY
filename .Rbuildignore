@@ -1,3 +1,4 @@
+^data-raw$
 ^devstuffs\.R$
 ^.*\.Rproj$
 ^\.Rproj\.user$
