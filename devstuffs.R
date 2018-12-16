@@ -14,4 +14,20 @@ usethis::use_test("get_inteventions_per_box")
 usethis::use_test("get_nb_units")
 usethis::use_test("statistic_fdny")
 
+usethis::use_vignette('cr_reunion_laures_20181123')
+usethis::use_vignette('tidy_firebox_data')
+usethis::use_vignette('tidy_incidents')
+usethis::use_vignette('MAP535RFDNY')
+
 devtools::check()
+
+devtools::load_all()
+
+nyfc_zip <- st_read(dsn = "data/ZIP_CODE_040114",
+                    layer = "ZIP_CODE_040114",
+                    quiet = TRUE)
+devtools::use_data(nyfc_zip, nyfc_zip)
+
+devtools::install(build_vignettes = TRUE)
+
+library(rhub)

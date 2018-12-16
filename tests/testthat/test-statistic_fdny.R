@@ -3,8 +3,6 @@ context("test-statistic_fdny")
 library(dplyr)
 library(purrr)
 
-load("../../data/incidents.RData")
-
 data.test <- tidy_incidents
 
 input <- list()
